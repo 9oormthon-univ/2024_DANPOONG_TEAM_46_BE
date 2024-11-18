@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookClubResqeustDTO {
+public class BookClubRequestDTO {
 	private String title;
-	private String bookTitle;
 	private ReadType type;
 	private String introduction;
 	private String startDate;
