@@ -17,5 +17,6 @@ public class BookClubResqeustDTO {
 	private String startDate;
 	private String endDate;
 	private int maxParticipant;
+	private String profile;
 
 }

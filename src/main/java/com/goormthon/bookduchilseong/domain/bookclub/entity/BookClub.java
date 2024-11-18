@@ -48,17 +48,21 @@ public class BookClub {
 	@Column(name = "maxParticipant")
 	private int maxParticipant;
 
+	@Column(name = "profile")
+	private String profile;
+
 	@Builder
-	public BookClub(String title, String bookTitle, ReadType type, String introduction, int participateCount, LocalDate startDate,
-		LocalDate endDate, int maxParticipant) {
+	public BookClub(String title, String bookTitle, ReadType type, String introduction, LocalDate startDate,
+		LocalDate endDate, int maxParticipant, String profile) {
 		this.title = title;
 		this.bookTitle = bookTitle;
 		this.type = type;
 		this.introduction = introduction;
-		this.participateCount = 0;
 		this.startDate = startDate;
 		this.endDate = endDate;
+		this.participateCount = 1;
 		this.maxParticipant = maxParticipant;
+		this.profile = profile;
 	}
 
 	public void increaseParticipateCount(int maxParticipant) {
