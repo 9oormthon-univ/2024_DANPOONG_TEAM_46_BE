@@ -28,15 +28,15 @@ public class UserBookClub {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
 
-	@ManyToOne
-	@JoinColumn(name = "book_club_id")
+	@JoinColumn(name = "book_club_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
 	private BookClub bookClub;
 
-	@Column(name = "is_owner")
+	@Column(name = "is_owner", nullable = false)
 	private boolean isOwner;
 
 	@Builder
