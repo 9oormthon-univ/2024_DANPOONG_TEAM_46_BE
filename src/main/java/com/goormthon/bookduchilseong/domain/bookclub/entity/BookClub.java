@@ -61,7 +61,7 @@ public class BookClub {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.participateCount = 1;
-		this.maxParticipant = 1;
+		this.maxParticipant = maxParticipant != 0 ? maxParticipant : 1;
 		this.profile = profile;
 	}
 
