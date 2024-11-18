@@ -1,4 +1,4 @@
-package com.goormthon.bookduchilseong.domain.book.controller.certification;
+package com.goormthon.bookduchilseong.domain.certification;
 
 import com.goormthon.bookduchilseong.domain.certification.controller.CertificationController;
 import com.fasterxml.jackson.databind.ObjectMapper;

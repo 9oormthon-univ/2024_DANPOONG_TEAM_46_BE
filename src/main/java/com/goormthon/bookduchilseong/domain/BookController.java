@@ -1,4 +1,4 @@
-package com.goormthon.bookduchilseong.domain.book.controller;
+package com.goormthon.bookduchilseong.domain;
 
 import com.goormthon.bookduchilseong.domain.book.dto.request.BookRequestDto;
 import com.goormthon.bookduchilseong.domain.book.dto.request.BookResponseDto;
