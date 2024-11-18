@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 public class BookClubResponseDTO {
 	private Long id;
 	private String title;
-	private String bookTitle;
 	private String introduction;
 	private LocalDate startDate;
 	private LocalDate endDate;

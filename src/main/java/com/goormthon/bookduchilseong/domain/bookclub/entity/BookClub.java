@@ -27,9 +27,6 @@ public class BookClub {
 	@Column(name = "title", nullable = false)
 	private String title;
 
-	@Column(name = "book_title", nullable = false)
-	private String bookTitle;
-
 	@Column(name = "type", nullable = false)
 	private ReadType type;
 
@@ -52,10 +49,9 @@ public class BookClub {
 	private String profile;
 
 	@Builder
-	public BookClub(String title, String bookTitle, ReadType type, String introduction, LocalDate startDate,
+	public BookClub(String title, ReadType type, String introduction, LocalDate startDate,
 		LocalDate endDate, int maxParticipant, String profile) {
 		this.title = title;
-		this.bookTitle = bookTitle;
 		this.type = type;
 		this.introduction = introduction;
 		this.startDate = startDate;

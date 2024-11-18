@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookClubRequestDTO {
+public class BookClubTogetherRequestDTO {
 	private String title;
 	private ReadType type;
 	private String introduction;
@@ -17,5 +17,7 @@ public class BookClubRequestDTO {
 	private String endDate;
 	private int maxParticipant;
 	private String profile;
-
+	private String bookTitle;
+	private String author;
+	private int totalPage;
 }

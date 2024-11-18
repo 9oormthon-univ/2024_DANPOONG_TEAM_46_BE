@@ -10,12 +10,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubResqeustDTO;
+import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubOnlyRequestDTO;
+import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubTogetherRequestDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubDetailDTO;
+import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubProgressDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubResponseDTO;
+import com.goormthon.bookduchilseong.domain.bookclub.entity.Book;
 import com.goormthon.bookduchilseong.domain.bookclub.entity.BookClub;
 import com.goormthon.bookduchilseong.domain.bookclub.entity.User;
 import com.goormthon.bookduchilseong.domain.bookclub.repository.BookClubRepository;
+import com.goormthon.bookduchilseong.domain.bookclub.repository.BookRepository;
 import com.goormthon.bookduchilseong.domain.bookclub.repository.UserRepository;
 import com.goormthon.bookduchilseong.domain.userbookclub.entity.UserBookClub;
 import com.goormthon.bookduchilseong.domain.userbookclub.repository.UserBookClubRepository;
@@ -29,21 +33,21 @@ public class BookClubServiceImpl implements BookClubService {
 	private final BookClubRepository bookClubRepository;
 	private final UserRepository userRepository;
 	private final UserBookClubRepository userBookClubRepository;
+	private final BookRepository bookRepository;
 
 	@Override
 	@Transactional
-	public void createBookClub(BookClubResqeustDTO bookClubResqeustDTO) {
+	public void createBookClubOnly(BookClubOnlyRequestDTO bookClubOnlyRequestDTO) {
 
 		// 북클럽 생성
 		BookClub bookClub = BookClub.builder()
-			.title(bookClubResqeustDTO.getTitle())
-			.bookTitle(bookClubResqeustDTO.getBookTitle())
-			.introduction(bookClubResqeustDTO.getIntroduction())
-			.startDate(LocalDate.parse(bookClubResqeustDTO.getStartDate()))
-			.endDate(LocalDate.parse(bookClubResqeustDTO.getEndDate()))
-			.maxParticipant(bookClubResqeustDTO.getMaxParticipant())
-			.type(bookClubResqeustDTO.getType())
-			.profile(bookClubResqeustDTO.getProfile())
+			.title(bookClubOnlyRequestDTO.getTitle())
+			.introduction(bookClubOnlyRequestDTO.getIntroduction())
+			.startDate(LocalDate.parse(bookClubOnlyRequestDTO.getStartDate()))
+			.endDate(LocalDate.parse(bookClubOnlyRequestDTO.getEndDate()))
+			.maxParticipant(bookClubOnlyRequestDTO.getMaxParticipant())
+			.type(bookClubOnlyRequestDTO.getType())
+			.profile(bookClubOnlyRequestDTO.getProfile())
 			.build();
 
 		bookClubRepository.save(bookClub);
@@ -54,6 +58,44 @@ public class BookClubServiceImpl implements BookClubService {
 			.bookClub(bookClub)
 			.isOwner(true)
 			.build();
+
+		userBookClubRepository.save(userBookClub);
+	}
+
+	@Override
+	@Transactional
+	public void createBookClubTogether(BookClubTogetherRequestDTO bookClubTogetherRequestDTO) {
+
+		// 북클럽 생성
+		BookClub bookClub = BookClub.builder()
+			.title(bookClubTogetherRequestDTO.getTitle())
+			.introduction(bookClubTogetherRequestDTO.getIntroduction())
+			.startDate(LocalDate.parse(bookClubTogetherRequestDTO.getStartDate()))
+			.endDate(LocalDate.parse(bookClubTogetherRequestDTO.getEndDate()))
+			.maxParticipant(bookClubTogetherRequestDTO.getMaxParticipant())
+			.type(bookClubTogetherRequestDTO.getType())
+			.profile(bookClubTogetherRequestDTO.getProfile())
+			.build();
+
+		bookClubRepository.save(bookClub);
+
+		// 유저_북클럽 생성
+		UserBookClub userBookClub = UserBookClub.builder()
+			.user(findUser(1L))
+			.bookClub(bookClub)
+			.isOwner(true)
+			.build();
+
+		Book book = Book.builder()
+			.user(findUser(1L))
+			.bookClub(bookClub)
+			.title(bookClubTogetherRequestDTO.getTitle())
+			.author(bookClubTogetherRequestDTO.getAuthor())
+			.totalPage(bookClubTogetherRequestDTO.getTotalPage())
+			.profile(bookClubTogetherRequestDTO.getProfile())
+			.build();
+
+		bookRepository.save(book);
 
 		userBookClubRepository.save(userBookClub);
 	}
@@ -112,7 +154,6 @@ public class BookClubServiceImpl implements BookClubService {
 		return BookClubDetailDTO.builder()
 			.id(bookClub.getId())
 			.ownerName((ownerUser.get()).getUser().getName())
-			.bookTitle(bookClub.getBookTitle())
 			.maxParticipant(bookClub.getMaxParticipant())
 			.participateCount(bookClub.getParticipateCount())
 			.startDate(String.valueOf(bookClub.getStartDate()))
