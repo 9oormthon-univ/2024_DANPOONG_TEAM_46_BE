@@ -21,12 +21,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/bookclub")
+@RequestMapping("/api/v1/bookclubs")
 public class BookClubController {
 
 	private final BookClubService bookClubService;
 
-	@PostMapping("/bookclubs")
+	@PostMapping()
 	public ApiResponse<?> createBookClub(@RequestBody BookClubResqeustDTO bookClubResqeustDTO) {
 		try {
 			bookClubService.createBookClub(bookClubResqeustDTO);
@@ -37,7 +37,7 @@ public class BookClubController {
 		}
 	}
 
-	@PostMapping("/bookclubs/{bookclubId}")
+	@PostMapping("/{bookclubId}/join")
 	public ApiResponse<?> joinBookClub(
 		@PathVariable Long bookclubId) {
 		try {
@@ -49,7 +49,7 @@ public class BookClubController {
 		}
 	}
 
-	@GetMapping("/bookclubs")
+	@GetMapping()
 	public ApiResponse<List<BookClubResponseDTO>> getBookClubs() {
 		try {
 			return ApiResponse.onSuccess(bookClubService.getBookClubs());
@@ -59,7 +59,7 @@ public class BookClubController {
 		}
 	}
 
-	@GetMapping("/bookclubs/{bookclubId}")
+	@GetMapping("/{bookclubId}")
 	public ApiResponse<BookClubDetailDTO> getBookClub(
 		@PathVariable Long bookclubId) {
 		try {
@@ -69,4 +69,5 @@ public class BookClubController {
 			return ApiResponse.onFailure("500", "북클럽 조회 실패", null);
 		}
 	}
+
 }
