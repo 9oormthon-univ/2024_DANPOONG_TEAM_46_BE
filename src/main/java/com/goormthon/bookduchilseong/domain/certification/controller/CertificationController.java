@@ -14,11 +14,14 @@ public class CertificationController {
     private final CertificationService certificationService;
 
     @PostMapping
-    public ApiResponse<String> createCertification(
+    public ApiResponse<?> createCertification(
             @PathVariable Long bookId,
             @RequestBody CertificationRequestDto requestDto) {
 
-        return certificationService.createCertification(bookId, requestDto);
+        try {
+            return certificationService.createCertification(bookId, requestDto);
+        } catch (RuntimeException e) {
+            return ApiResponse.onFailure("500", "도서 인증 실패: " + e.getMessage(), null);
+        }
     }
-
 }
