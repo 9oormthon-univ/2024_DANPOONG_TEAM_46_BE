@@ -1,16 +1,21 @@
 package com.goormthon.bookduchilseong.domain.bookclub.service;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubResqeustDTO;
+import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubResponseDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.entity.BookClub;
 import com.goormthon.bookduchilseong.domain.bookclub.entity.User;
-import com.goormthon.bookduchilseong.domain.bookclub.entity.UserBookClub;
+import com.goormthon.bookduchilseong.domain.userbookclub.entity.UserBookClub;
 import com.goormthon.bookduchilseong.domain.bookclub.repository.BookClubRepository;
-import com.goormthon.bookduchilseong.domain.bookclub.repository.UserBookClubRepository;
+import com.goormthon.bookduchilseong.domain.userbookclub.repository.UserBookClubRepository;
 import com.goormthon.bookduchilseong.domain.bookclub.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -32,11 +37,11 @@ public class BookClubServiceImpl implements BookClubService {
 			.title(bookClubResqeustDTO.getTitle())
 			.bookTitle(bookClubResqeustDTO.getBookTitle())
 			.introduction(bookClubResqeustDTO.getIntroduction())
-			.participateCount(1)
 			.startDate(LocalDate.parse(bookClubResqeustDTO.getStartDate()))
 			.endDate(LocalDate.parse(bookClubResqeustDTO.getEndDate()))
 			.maxParticipant(bookClubResqeustDTO.getMaxParticipant())
 			.type(bookClubResqeustDTO.getType())
+			.profile(bookClubResqeustDTO.getProfile())
 			.build();
 
 		bookClubRepository.save(bookClub);
@@ -77,6 +82,14 @@ public class BookClubServiceImpl implements BookClubService {
 		bookClubRepository.save(bookClub);
 		userBookClubRepository.save(newUserBookClub);
 
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<BookClubResponseDTO> getBookClubs() {
+
+		Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());
+		return bookClubRepository.findBookClubs(pageable);
 	}
 
 	private User findUser(Long userId) {

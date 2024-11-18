@@ -1,6 +1,9 @@
 package com.goormthon.bookduchilseong.domain.bookclub.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubResqeustDTO;
+import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubResponseDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.service.BookClubService;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
 
@@ -42,6 +46,16 @@ public class BookClubController {
 		} catch (Exception e) {
 			log.info(e.getMessage());
 			return ApiResponse.onFailure("500", "북클럽 가입하기 실패", null);
+		}
+	}
+
+	@GetMapping("/bookclubs")
+	public ApiResponse<List<BookClubResponseDTO>> getBookClubs() {
+		try {
+			return ApiResponse.onSuccess(bookClubService.getBookClubs());
+		} catch (Exception e) {
+			log.info(e.getMessage());
+			return ApiResponse.onFailure("500", "북클럽 조회 실패", null);
 		}
 	}
 }
