@@ -24,31 +24,31 @@ public class BookClub {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "title")
+	@Column(name = "title", nullable = false)
 	private String title;
 
-	@Column(name = "book_title", nullable = true)
+	@Column(name = "book_title", nullable = false)
 	private String bookTitle;
 
-	@Column(name = "type")
+	@Column(name = "type", nullable = false)
 	private ReadType type;
 
-	@Column(name = "introduction", columnDefinition = "TEXT")
+	@Column(name = "introduction", columnDefinition = "TEXT",  nullable = false)
 	private String introduction;
 
-	@Column(name = "participate_count")
+	@Column(name = "participate_count", nullable = false)
 	private int participateCount;
 
-	@Column(name = "start_date")
+	@Column(name = "start_date", nullable = false)
 	private LocalDate startDate;
 
-	@Column(name = "end_date")
+	@Column(name = "end_date", nullable = false)
 	private LocalDate endDate;
 
-	@Column(name = "maxParticipant")
+	@Column(name = "maxParticipant", nullable = false)
 	private int maxParticipant;
 
-	@Column(name = "profile")
+	@Column(name = "profile", nullable = false)
 	private String profile;
 
 	@Builder
@@ -61,7 +61,7 @@ public class BookClub {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.participateCount = 1;
-		this.maxParticipant = maxParticipant;
+		this.maxParticipant = 1;
 		this.profile = profile;
 	}
 
@@ -70,7 +70,7 @@ public class BookClub {
 			throw new IllegalArgumentException("The number of participants has reached the maximum.");
 		} else {
 			this.participateCount = participateCount + 1;
-		} 
+		}
 	}
 
 	public void decreaseParticipateCount() {
