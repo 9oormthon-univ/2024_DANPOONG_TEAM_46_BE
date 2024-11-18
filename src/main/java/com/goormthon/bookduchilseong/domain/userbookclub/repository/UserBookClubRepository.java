@@ -1,5 +1,6 @@
 package com.goormthon.bookduchilseong.domain.userbookclub.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,6 @@ public interface UserBookClubRepository extends JpaRepository<UserBookClub, Long
 	boolean existsByUserAndBookClub(User user, BookClub bookClub);
 
 	Optional<UserBookClub> findByBookClubAndIsOwner(BookClub bookClub, boolean isOwner);
+
+	List<UserBookClub> findByBookClub(BookClub bookClub);
 }

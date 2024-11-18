@@ -3,6 +3,7 @@ package com.goormthon.bookduchilseong.domain.bookclub.service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,9 @@ import com.goormthon.bookduchilseong.domain.userbookclub.entity.UserBookClub;
 import com.goormthon.bookduchilseong.domain.userbookclub.repository.UserBookClubRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BookClubServiceImpl implements BookClubService {
@@ -39,7 +42,6 @@ public class BookClubServiceImpl implements BookClubService {
 	@Transactional
 	public void createBookClubOnly(BookClubOnlyRequestDTO bookClubOnlyRequestDTO) {
 
-		// 북클럽 생성
 		BookClub bookClub = BookClub.builder()
 			.title(bookClubOnlyRequestDTO.getTitle())
 			.introduction(bookClubOnlyRequestDTO.getIntroduction())
@@ -52,12 +54,7 @@ public class BookClubServiceImpl implements BookClubService {
 
 		bookClubRepository.save(bookClub);
 
-		// 유저_북클럽 생성
-		UserBookClub userBookClub = UserBookClub.builder()
-			.user(findUser(1L))
-			.bookClub(bookClub)
-			.isOwner(true)
-			.build();
+		UserBookClub userBookClub = UserBookClub.builder().user(findUser(1L)).bookClub(bookClub).isOwner(true).build();
 
 		userBookClubRepository.save(userBookClub);
 	}
@@ -66,7 +63,6 @@ public class BookClubServiceImpl implements BookClubService {
 	@Transactional
 	public void createBookClubTogether(BookClubTogetherRequestDTO bookClubTogetherRequestDTO) {
 
-		// 북클럽 생성
 		BookClub bookClub = BookClub.builder()
 			.title(bookClubTogetherRequestDTO.getTitle())
 			.introduction(bookClubTogetherRequestDTO.getIntroduction())
@@ -79,17 +75,12 @@ public class BookClubServiceImpl implements BookClubService {
 
 		bookClubRepository.save(bookClub);
 
-		// 유저_북클럽 생성
-		UserBookClub userBookClub = UserBookClub.builder()
-			.user(findUser(1L))
-			.bookClub(bookClub)
-			.isOwner(true)
-			.build();
+		UserBookClub userBookClub = UserBookClub.builder().user(findUser(1L)).bookClub(bookClub).isOwner(true).build();
 
 		Book book = Book.builder()
 			.user(findUser(1L))
 			.bookClub(bookClub)
-			.title(bookClubTogetherRequestDTO.getTitle())
+			.title(bookClubTogetherRequestDTO.getBookTitle())
 			.author(bookClubTogetherRequestDTO.getAuthor())
 			.totalPage(bookClubTogetherRequestDTO.getTotalPage())
 			.profile(bookClubTogetherRequestDTO.getProfile())
@@ -104,10 +95,8 @@ public class BookClubServiceImpl implements BookClubService {
 	@Transactional
 	public void joinBookClub(Long bookclubId) {
 
-		//JWT로 변경
 		User user = findUser(6L);
 
-		// 북클럽 찾기
 		BookClub bookClub = bookClubRepository.findById(bookclubId)
 			.orElseThrow(() -> new IllegalArgumentException("Not Found BookClub By bookclubId"));
 
@@ -115,15 +104,24 @@ public class BookClubServiceImpl implements BookClubService {
 			throw new IllegalArgumentException("Already Joined BookClub");
 		}
 
-		// 참여하기
-		UserBookClub newUserBookClub = UserBookClub.builder()
-			.user(user)
-			.bookClub(bookClub)
-			.isOwner(false)
-			.build();
+		UserBookClub newUserBookClub = UserBookClub.builder().user(user).bookClub(bookClub).isOwner(false).build();
 
 		int maxParticipant = bookClub.getMaxParticipant();
 		bookClub.increaseParticipateCount(maxParticipant);
+
+		Optional<Book> book = bookRepository.findByBookClub(bookClub);
+		if (book.isPresent()) {
+			Book newBook = Book.builder()
+				.user(user)
+				.bookClub(bookClub)
+				.title(book.get().getTitle())
+				.author(book.get().getAuthor())
+				.totalPage(book.get().getTotalPage())
+				.profile(book.get().getProfile())
+				.build();
+
+			bookRepository.save(newBook);
+		}
 
 		bookClubRepository.save(bookClub);
 		userBookClubRepository.save(newUserBookClub);
@@ -160,6 +158,37 @@ public class BookClubServiceImpl implements BookClubService {
 			.endDate(String.valueOf(bookClub.getEndDate()))
 			.profile(bookClub.getProfile())
 			.build();
+	}
+
+	@Override
+	public List<BookClubProgressDTO> getBookClubProgresses(Long bookclubId) {
+
+		BookClub bookClub = bookClubRepository.findById(bookclubId)
+			.orElseThrow(() -> new IllegalArgumentException("Not Found BookClub By bookclubId"));
+
+		List<UserBookClub> userBookClubs = userBookClubRepository.findByBookClub(bookClub);
+		if (userBookClubs.isEmpty()) {
+			throw new IllegalArgumentException("Not Found Users By bookClub");
+		}
+
+		List<BookClubProgressDTO> progressDTOs = userBookClubs.stream().map(userBookClub -> {
+			User user = userBookClub.getUser();
+			log.info("user: {}", user.getName());
+
+			Book book = bookRepository.findByBookClubAndUser(bookClub, user)
+				.orElseThrow(() -> new IllegalArgumentException("Not Found Book By bookClub and user"));
+
+			return BookClubProgressDTO.builder()
+				.name(user.getName())
+				.zodiacsigns(user.getZodiacsigns())
+				.profile(user.getProfile())
+				.totalPage(book.getTotalPage())
+				.readPage(book.getReadPage())
+				.goalDayPage(book.getGoalDayPage())
+				.build();
+		}).collect(Collectors.toList());
+
+		return progressDTOs;
 	}
 
 	private User findUser(Long userId) {

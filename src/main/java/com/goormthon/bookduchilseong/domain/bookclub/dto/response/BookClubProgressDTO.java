@@ -9,13 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookClubDetailDTO {
-	private Long id;
-	private String ownerName;
-	private String startDate;
-	private String endDate;
-	private int participateCount;
-	private int maxParticipant;
+public class BookClubProgressDTO {
+	private String name;
+	private String zodiacsigns;
 	private String profile;
-
+	private int totalPage;
+	private int readPage;
+	private int goalDayPage;
 }

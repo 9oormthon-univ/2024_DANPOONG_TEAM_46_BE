@@ -82,4 +82,14 @@ public class BookClubController {
 		}
 	}
 
+	@GetMapping("{bookclubId}/progresses")
+	public ApiResponse<?> getBookClubProgresses(
+		@PathVariable Long bookclubId) {
+		try {
+			return ApiResponse.onSuccess(bookClubService.getBookClubProgresses(bookclubId));
+		} catch (Exception e) {
+			log.info(e.getMessage());
+			return ApiResponse.onFailure("500", "북클럽 진행도 조회 실패", null);
+		}
+	}
 }

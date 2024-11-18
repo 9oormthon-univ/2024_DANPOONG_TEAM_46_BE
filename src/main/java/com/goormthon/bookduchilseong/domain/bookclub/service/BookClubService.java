@@ -19,4 +19,6 @@ public interface BookClubService {
 	List<BookClubResponseDTO> getBookClubs();
 
 	BookClubDetailDTO getBookClub(Long bookclubId);
+
+	List<BookClubProgressDTO> getBookClubProgresses(Long bookclubId);
 }
