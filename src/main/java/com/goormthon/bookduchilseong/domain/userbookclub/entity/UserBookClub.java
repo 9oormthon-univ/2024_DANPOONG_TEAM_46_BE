@@ -3,6 +3,7 @@ package com.goormthon.bookduchilseong.domain.userbookclub.entity;
 import com.goormthon.bookduchilseong.domain.bookclub.entity.BookClub;
 import com.goormthon.bookduchilseong.domain.bookclub.entity.User;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -30,13 +31,17 @@ public class UserBookClub {
 	private User user;
 
 	@ManyToOne
-	@JoinColumn(name = "book_club_id") // Specifies the foreign key column in the UserBookClub table
+	@JoinColumn(name = "book_club_id")
 	private BookClub bookClub;
 
+	@Column(name = "is_owner")
+	private boolean isOwner;
+
 	@Builder
-	public UserBookClub(User user, BookClub bookClub) {
+	public UserBookClub(User user, BookClub bookClub, boolean isOwner) {
 		this.user = user;
 		this.bookClub = bookClub;
+		this.isOwner = isOwner;
 	}
 
 }

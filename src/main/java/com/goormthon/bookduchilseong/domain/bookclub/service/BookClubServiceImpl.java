@@ -2,6 +2,7 @@ package com.goormthon.bookduchilseong.domain.bookclub.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,13 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubResqeustDTO;
+import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubDetailDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubResponseDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.entity.BookClub;
 import com.goormthon.bookduchilseong.domain.bookclub.entity.User;
-import com.goormthon.bookduchilseong.domain.userbookclub.entity.UserBookClub;
 import com.goormthon.bookduchilseong.domain.bookclub.repository.BookClubRepository;
-import com.goormthon.bookduchilseong.domain.userbookclub.repository.UserBookClubRepository;
 import com.goormthon.bookduchilseong.domain.bookclub.repository.UserRepository;
+import com.goormthon.bookduchilseong.domain.userbookclub.entity.UserBookClub;
+import com.goormthon.bookduchilseong.domain.userbookclub.repository.UserBookClubRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -50,6 +52,7 @@ public class BookClubServiceImpl implements BookClubService {
 		UserBookClub userBookClub = UserBookClub.builder()
 			.user(findUser(1L))
 			.bookClub(bookClub)
+			.isOwner(true)
 			.build();
 
 		userBookClubRepository.save(userBookClub);
@@ -64,7 +67,7 @@ public class BookClubServiceImpl implements BookClubService {
 
 		// 북클럽 찾기
 		BookClub bookClub = bookClubRepository.findById(bookclubId)
-			.orElseThrow(() -> new IllegalArgumentException("Not Found BookClub"));
+			.orElseThrow(() -> new IllegalArgumentException("Not Found BookClub By bookclubId"));
 
 		if (userBookClubRepository.existsByUserAndBookClub(user, bookClub)) {
 			throw new IllegalArgumentException("Already Joined BookClub");
@@ -74,6 +77,7 @@ public class BookClubServiceImpl implements BookClubService {
 		UserBookClub newUserBookClub = UserBookClub.builder()
 			.user(user)
 			.bookClub(bookClub)
+			.isOwner(false)
 			.build();
 
 		int maxParticipant = bookClub.getMaxParticipant();
@@ -92,9 +96,34 @@ public class BookClubServiceImpl implements BookClubService {
 		return bookClubRepository.findBookClubs(pageable);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public BookClubDetailDTO getBookClub(Long bookclubId) {
+
+		BookClub bookClub = bookClubRepository.findById(bookclubId)
+			.orElseThrow(() -> new IllegalArgumentException("Not Found BookClub By bookclubId"));
+
+		Optional<UserBookClub> ownerUser = userBookClubRepository.findByBookClubAndIsOwner(bookClub, true);
+
+		if (ownerUser.isEmpty()) {
+			throw new IllegalArgumentException("Not Found Owner User");
+		}
+
+		return BookClubDetailDTO.builder()
+			.id(bookClub.getId())
+			.ownerName((ownerUser.get()).getUser().getName())
+			.bookTitle(bookClub.getBookTitle())
+			.maxParticipant(bookClub.getMaxParticipant())
+			.participateCount(bookClub.getParticipateCount())
+			.startDate(String.valueOf(bookClub.getStartDate()))
+			.endDate(String.valueOf(bookClub.getEndDate()))
+			.profile(bookClub.getProfile())
+			.build();
+	}
+
 	private User findUser(Long userId) {
-		return  userRepository.findById(userId)
-			.orElseThrow(() -> new IllegalArgumentException("Not Found User"));
+		return userRepository.findById(userId)
+			.orElseThrow(() -> new IllegalArgumentException("Not Found User By userId"));
 	}
 
 }
