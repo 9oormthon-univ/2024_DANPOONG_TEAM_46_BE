@@ -1,7 +1,6 @@
 package com.goormthon.bookduchilseong.domain.bookclub.entity;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,6 +36,9 @@ public class BookClub {
 	@Column(name = "introduction", columnDefinition = "TEXT")
 	private String introduction;
 
+	@Column(name = "participate_count")
+	private int participateCount;
+
 	@Column(name = "start_date")
 	private LocalDate startDate;
 
@@ -47,14 +49,27 @@ public class BookClub {
 	private int maxParticipant;
 
 	@Builder
-	public BookClub(String title, String bookTitle, ReadType type, String introduction, LocalDate startDate,
+	public BookClub(String title, String bookTitle, ReadType type, String introduction, int participateCount, LocalDate startDate,
 		LocalDate endDate, int maxParticipant) {
 		this.title = title;
 		this.bookTitle = bookTitle;
 		this.type = type;
 		this.introduction = introduction;
+		this.participateCount = 0;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.maxParticipant = maxParticipant;
+	}
+
+	public void increaseParticipateCount(int maxParticipant) {
+		if (participateCount > maxParticipant) {
+			throw new IllegalArgumentException("The number of participants has reached the maximum.");
+		} else {
+			this.participateCount = participateCount + 1;
+		} 
+	}
+
+	public void decreaseParticipateCount() {
+		this.participateCount = participateCount - 1;
 	}
 }

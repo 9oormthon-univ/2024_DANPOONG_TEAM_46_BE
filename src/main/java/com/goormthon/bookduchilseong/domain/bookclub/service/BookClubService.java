@@ -5,4 +5,6 @@ import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubResqeus
 public interface BookClubService {
 
 	void createBookClub(BookClubResqeustDTO bookClubResqeustDTO);
+
+	void joinBookClub(Long bookClubId);
 }
