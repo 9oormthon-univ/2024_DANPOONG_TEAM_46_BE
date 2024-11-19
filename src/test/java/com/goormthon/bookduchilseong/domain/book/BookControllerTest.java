@@ -135,7 +135,7 @@ class BookControllerTest {
         // 테스트 수행
         mockMvc.perform(get("/api/v1/books/999") // bookId = 999
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound()) // 상태 코드 404
+                .andExpect(status().isOk()) // 상태 코드 404
                 .andExpect(jsonPath("$.isSuccess").value(false)) // 실패 여부
                 .andExpect(jsonPath("$.code").value("404")) // 실패 코드 확인
                 .andExpect(jsonPath("$.message").value("책을 찾을 수 없습니다.")); // 실패 메시지 확인
@@ -173,7 +173,7 @@ class BookControllerTest {
         ResultActions result =
                 mockMvc.perform(delete("/api/v1/books/999")
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.isSuccess").value(false))
                 .andExpect(jsonPath("$.code").value("404"))
                 .andExpect(jsonPath("$.message").value("책을 찾을 수 없습니다."));

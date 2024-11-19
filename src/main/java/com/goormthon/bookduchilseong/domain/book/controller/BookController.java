@@ -21,41 +21,47 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<?>> addBook(@RequestBody BookRequestDto requestDto) {
-        BookResponseDto responseDto = bookService.addBook(requestDto);
-        return ResponseEntity.ok(ApiResponse.onSuccess(responseDto));
+    public ApiResponse<?> addBook(@RequestBody BookRequestDto requestDto) {
+        try{
+            BookResponseDto responseDto = bookService.addBook(requestDto);
+            return ApiResponse.onSuccess(responseDto);
+        }catch (RuntimeException e){
+            return ApiResponse.onFailure("404", e.getMessage(), null);
+        }
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<?>> getAllBooks(@RequestParam Long userId) {
-        List<BookResponseDto> books = bookService.getAllBooks(userId);
-        return ResponseEntity.ok(ApiResponse.onSuccess(books));
+    public ApiResponse<?> getAllBooks(@RequestParam Long userId) {
+        try{
+            List<BookResponseDto> books = bookService.getAllBooks(userId);
+            return ApiResponse.onSuccess(books);
+        }catch (RuntimeException e){
+            return ApiResponse.onFailure("404", e.getMessage(), null);
+        }
     }
 
     @GetMapping("/{bookId}")
-    public ResponseEntity<ApiResponse<?>> getBookDetail(@PathVariable Long bookId) {
+    public ApiResponse<?> getBookDetail(@PathVariable Long bookId) {
         try{
             BookResponseDto bookDetail = bookService.getBookDetail(bookId);
-            return ResponseEntity.ok(ApiResponse.onSuccess(bookDetail));
+            return ApiResponse.onSuccess(bookDetail);
         }catch (RuntimeException e){
-            return ResponseEntity.status(404)
-                    .body(ApiResponse.onFailure("404", e.getMessage(), null));
+            return ApiResponse.onFailure("404", e.getMessage(), null);
         }
     }
 
     @DeleteMapping("/{bookId}")
-    public ResponseEntity<ApiResponse<?>> deleteBook(@PathVariable Long bookId) {
+    public ApiResponse<?> deleteBook(@PathVariable Long bookId) {
         try {
             bookService.deleteBook(bookId);
-            return ResponseEntity.ok(ApiResponse.onSuccess(null));
+            return ApiResponse.onSuccess(null);
         } catch (RuntimeException e) { // 책이 없을 때 발생하는 예외 처리
-            return ResponseEntity.status(404) // 404 상태 코드 반환
-                    .body(ApiResponse.onFailure("404", e.getMessage(), null));
+            return ApiResponse.onFailure("404", e.getMessage(), null);
         }
     }
 
     @PatchMapping("/{bookId}")
-    public ApiResponse<String> updateBookStatus(
+    public ApiResponse<?> updateBookStatus(
             @PathVariable Long bookId,
             @RequestParam("readStatus") String readStatus) {
         try {
