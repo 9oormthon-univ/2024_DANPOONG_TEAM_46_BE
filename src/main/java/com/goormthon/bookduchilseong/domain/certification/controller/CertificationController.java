@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CertificationController {
 
-    private final CertificationService certificationService;
+	private final CertificationService certificationService;
 
-    @PostMapping
-    public ApiResponse<?> createCertification(
-            @PathVariable Long bookId,
-            @RequestBody CertificationRequestDto requestDto) {
+	@PostMapping
+	public ApiResponse<?> createCertification(
+		@PathVariable Long bookId,
+		@RequestBody CertificationRequestDto requestDto) {
 
-        try {
-            return certificationService.createCertification(bookId, requestDto);
-        } catch (RuntimeException e) {
-            return ApiResponse.onFailure("500", "도서 인증 실패: " + e.getMessage(), null);
-        }
-    }
+		try {
+			return certificationService.createCertification(bookId, requestDto);
+		} catch (RuntimeException e) {
+			return ApiResponse.onFailure("500", "도서 인증 실패: " + e.getMessage(), null);
+		}
+	}
 }

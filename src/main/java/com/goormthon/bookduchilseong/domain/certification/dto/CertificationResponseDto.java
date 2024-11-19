@@ -6,9 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CertificationResponseDto {
-    private String message;
+	private String message;
 
-    public CertificationResponseDto(String message) {
-        this.message = message;
-    }
+	public CertificationResponseDto(String message) {
+		this.message = message;
+	}
 }

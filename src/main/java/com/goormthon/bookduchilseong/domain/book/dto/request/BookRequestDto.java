@@ -9,10 +9,11 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class BookRequestDto {
-    private Long userId;
-    private String title;
-    private String author;
-    private Long totalPage;
-    private Long goalDayPage;
-    private ReadStatus status; // Enum 추가
+	private Long userId;
+	private String title;
+	private String author;
+	private Integer totalPage;
+	private Integer goalDayPage;
+	private ReadStatus status; // Enum 추가
+	private String profile;
 }

@@ -1,9 +1,25 @@
 package com.goormthon.bookduchilseong.domain.book.entity;
 
-import java.time.LocalDateTime;
+import com.goormthon.bookduchilseong.domain.bookclub.entity.BookClub;
+import com.goormthon.bookduchilseong.domain.user.entity.User;
+import com.goormthon.bookduchilseong.global.common.BaseEntity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -11,55 +27,56 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "book")
-public class Book {
+public class Book extends BaseEntity {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id; // 도서 ID
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 도서 ID
+	@Column(name = "title", nullable = false)
+	private String title; // 책 제목
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId; // 유저 ID
+	@Column(name = "author", nullable = false)
+	private String author; // 작가
 
-    @Column(name = "title", nullable = false)
-    private String title; // 책 제목
+	@Column(name = "total_page", nullable = false)
+	private Integer totalPage; // 전체 페이지 수
 
-    @Column(name = "author", nullable = false)
-    private String author; // 작가
+	@Column(name = "goal_day_page", nullable = false)
+	private Integer goalDayPage; // 목표 하루 페이지 수
 
-    @Column(name = "total_page", nullable = false)
-    private Long totalPage; // 전체 페이지 수
+	@Column(name = "read_page", nullable = false)
+	private Integer readPage; // 읽은 페이지 수
 
-    @Column(name = "goal_day_page", nullable = false)
-    private Long goalDayPage; // 목표 하루 페이지 수
+	@Enumerated(EnumType.STRING) // Enum을 문자열로 저장
+	@Column(name = "status", nullable = false)
+	private ReadStatus status; // 독서 상태
 
-    @Column(name = "read_page", nullable = false)
-    private Long readPage; // 읽은 페이지 수
+	@Column(name = "profile", nullable = false)
+	private String profile; // 책 이미지 URL
 
-    @Enumerated(EnumType.STRING) // Enum을 문자열로 저장
-    @Column(name = "status", nullable = false)
-    private ReadStatus status; // 독서 상태
+	@JoinColumn(name = "book_club_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private BookClub bookClub;
 
-    @Column(name = "create_at", nullable = false, updatable = false)
-    private LocalDateTime createAt; // 생성일
+	@JoinColumn(name = "user_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private User user;
 
-    @Column(name = "update_at", nullable = false)
-    private LocalDateTime updateAt; // 수정일
+	@Builder
+	public Book(String title, String author, Integer totalPage, Integer goalDayPage, Integer readPage,
+		ReadStatus status, String profile, BookClub bookClub, User user) {
+		this.title = title;
+		this.author = author;
+		this.totalPage = totalPage;
+		this.goalDayPage = goalDayPage;
+		this.readPage = readPage;
+		this.status = status;
+		this.profile = profile;
+		this.bookClub = bookClub;
+		this.user = user;
+	}
 
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted; // 삭제 여부
-
-    @Builder
-    public Book(Long userId, String title, String author, Long totalPage, Long goalDayPage, Long readPage,
-                ReadStatus status, LocalDateTime createAt, LocalDateTime updateAt, Boolean isDeleted) {
-        this.userId = userId;
-        this.title = title;
-        this.author = author;
-        this.totalPage = totalPage;
-        this.goalDayPage = goalDayPage;
-        this.readPage = readPage;
-        this.status = status;
-        this.createAt = createAt;
-        this.updateAt = updateAt;
-        this.isDeleted = isDeleted;
-    }
+	public void setIsDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 }

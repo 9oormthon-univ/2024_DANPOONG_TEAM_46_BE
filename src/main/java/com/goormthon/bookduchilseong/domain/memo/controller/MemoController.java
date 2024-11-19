@@ -12,20 +12,20 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemoController {
 
-    private final MemoService memoService;
+	private final MemoService memoService;
 
-//    @PostMapping
-//    public ApiResponse<?> createMemo(@RequestBody MemoRequestDto requestDto) {
-//        return memoService.createMemo(requestDto);
-//    }
+	//    @PostMapping
+	//    public ApiResponse<?> createMemo(@RequestBody MemoRequestDto requestDto) {
+	//        return memoService.createMemo(requestDto);
+	//    }
 
-    @PostMapping
-    public ApiResponse<?> createMemo(@RequestBody MemoRequestDto requestDto) {
-        try {
-            return memoService.createMemo(requestDto);
-        }
-        catch (RuntimeException e){
-            return ApiResponse.onFailure("500", "메모 생성 실패: " + e.getMessage(), null);
-        }
-    }
+	@PostMapping
+	public ApiResponse<?> createMemo(@RequestBody MemoRequestDto requestDto) {
+		try {
+			return memoService.createMemo(requestDto);
+		}
+		catch (RuntimeException e){
+			return ApiResponse.onFailure("500", "메모 생성 실패: " + e.getMessage(), null);
+		}
+	}
 }

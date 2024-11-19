@@ -8,8 +8,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CertificationRequestDto {
-    private Integer startPage;
-    private Integer endPage;
-    private String image;
-    private String paragraph;
+	private Integer startPage;
+	private Integer endPage;
+	private String image;
+	private String paragraph;
 }
