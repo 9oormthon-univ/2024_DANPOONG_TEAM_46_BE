@@ -19,5 +19,5 @@ public class BookClubTogetherRequestDTO {
 	private String profile;
 	private String bookTitle;
 	private String author;
-	private Long totalPage;
+	private Integer totalPage;
 }

@@ -14,9 +14,9 @@ public class BookResponseDto {
 	private String title;
 	private String author;
 	private int progress; // 독서 진행률
-	private Long totalPage;
-	private Long goalDayPage;
-	private Long readPage;
+	private Integer totalPage;
+	private Integer goalDayPage;
+	private Integer readPage;
 	private ReadStatus status; // Enum 추가
 
 	public BookResponseDto(Book book) {

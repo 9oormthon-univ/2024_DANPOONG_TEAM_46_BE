@@ -32,9 +32,6 @@ public class Book extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; // 도서 ID
 
-	@Column(name = "user_id", nullable = false)
-	private Long userId; // 유저 ID
-
 	@Column(name = "title", nullable = false)
 	private String title; // 책 제목
 
@@ -42,13 +39,13 @@ public class Book extends BaseEntity {
 	private String author; // 작가
 
 	@Column(name = "total_page", nullable = false)
-	private Long totalPage; // 전체 페이지 수
+	private Integer totalPage; // 전체 페이지 수
 
 	@Column(name = "goal_day_page", nullable = false)
-	private Long goalDayPage; // 목표 하루 페이지 수
+	private Integer goalDayPage; // 목표 하루 페이지 수
 
 	@Column(name = "read_page", nullable = false)
-	private Long readPage; // 읽은 페이지 수
+	private Integer readPage; // 읽은 페이지 수
 
 	@Enumerated(EnumType.STRING) // Enum을 문자열로 저장
 	@Column(name = "status", nullable = false)
@@ -66,9 +63,8 @@ public class Book extends BaseEntity {
 	private User user;
 
 	@Builder
-	public Book(Long userId, String title, String author, Long totalPage, Long goalDayPage, Long readPage,
+	public Book(String title, String author, Integer totalPage, Integer goalDayPage, Integer readPage,
 		ReadStatus status, String profile, BookClub bookClub, User user) {
-		this.userId = userId;
 		this.title = title;
 		this.author = author;
 		this.totalPage = totalPage;
@@ -78,5 +74,9 @@ public class Book extends BaseEntity {
 		this.profile = profile;
 		this.bookClub = bookClub;
 		this.user = user;
+	}
+
+	public void setIsDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 }
