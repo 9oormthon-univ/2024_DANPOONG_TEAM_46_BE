@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubOnlyRequestDTO;
@@ -28,9 +29,10 @@ public class BookClubController {
 	private final BookClubService bookClubService;
 
 	@PostMapping("/only")
-	public ApiResponse<?> createBookClubOnly(@RequestBody BookClubOnlyRequestDTO bookClubOnlyRequestDTO) {
+	public ApiResponse<?> createBookClubOnly(@RequestBody BookClubOnlyRequestDTO bookClubOnlyRequestDTO,
+		@RequestParam("userId") Long userId) {
 		try {
-			bookClubService.createBookClubOnly(bookClubOnlyRequestDTO);
+			bookClubService.createBookClubOnly(bookClubOnlyRequestDTO, userId);
 			return ApiResponse.onSuccess("북클럽 생성 성공");
 		} catch (Exception e) {
 			log.info(e.getMessage());
@@ -39,9 +41,10 @@ public class BookClubController {
 	}
 
 	@PostMapping("/together")
-	public ApiResponse<?> createBookClubTogether(@RequestBody BookClubTogetherRequestDTO bookClubTogetherRequestDTO) {
+	public ApiResponse<?> createBookClubTogether(@RequestBody BookClubTogetherRequestDTO bookClubTogetherRequestDTO,
+	@RequestParam("userId") Long userId){
 		try {
-			bookClubService.createBookClubTogether(bookClubTogetherRequestDTO);
+			bookClubService.createBookClubTogether(bookClubTogetherRequestDTO, userId);
 			return ApiResponse.onSuccess("북클럽 생성 성공");
 		} catch (Exception e) {
 			log.info(e.getMessage());
@@ -50,9 +53,10 @@ public class BookClubController {
 	}
 
 	@PostMapping("/{bookclubId}/join")
-	public ApiResponse<?> joinBookClub(@PathVariable Long bookclubId) {
+	public ApiResponse<?> joinBookClub(@PathVariable Long bookclubId,
+		@RequestParam("userId") Long userId) {
 		try {
-			bookClubService.joinBookClub(bookclubId);
+			bookClubService.joinBookClub(bookclubId, userId);
 			return ApiResponse.onSuccess("북클럽 가입하기 성공");
 		} catch (Exception e) {
 			log.info(e.getMessage());
@@ -101,9 +105,9 @@ public class BookClubController {
 	}
 
 	@GetMapping("/joined")
-	public ApiResponse<?> getJoinedBookClubs() {
+	public ApiResponse<?> getJoinedBookClubs(@RequestParam("userId") Long userId) {
 		try {
-			return ApiResponse.onSuccess(bookClubService.getJoinedBookClubs());
+			return ApiResponse.onSuccess(bookClubService.getJoinedBookClubs(userId));
 		} catch (Exception e) {
 			log.info(e.getMessage());
 			return ApiResponse.onFailure("500", "이전 가입했던 북클럽 조회 실패", null);
@@ -111,9 +115,9 @@ public class BookClubController {
 	}
 
 	@GetMapping("/join")
-	public ApiResponse<?> getJoinBookClubs() {
+	public ApiResponse<?> getJoinBookClubs(@RequestParam("userId") Long userId) {
 		try {
-			return ApiResponse.onSuccess(bookClubService.getjoinBookClubs());
+			return ApiResponse.onSuccess(bookClubService.getjoinBookClubs(userId));
 		} catch (Exception e) {
 			log.info(e.getMessage());
 			return ApiResponse.onFailure("500", "가입한 북클럽 조회 실패", null);

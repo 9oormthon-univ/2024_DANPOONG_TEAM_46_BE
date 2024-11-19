@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.goormthon.bookduchilseong.domain.book.entity.Book;
+import com.goormthon.bookduchilseong.domain.book.entity.ReadStatus;
 import com.goormthon.bookduchilseong.domain.book.repository.BookRepository;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubOnlyRequestDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubTogetherRequestDTO;
@@ -47,7 +48,7 @@ public class BookClubServiceImpl implements BookClubService {
 
 	@Override
 	@Transactional
-	public void createBookClubOnly(BookClubOnlyRequestDTO bookClubOnlyRequestDTO) {
+	public void createBookClubOnly(BookClubOnlyRequestDTO bookClubOnlyRequestDTO, Long userId) {
 
 		BookClub bookClub = BookClub.builder()
 			.title(bookClubOnlyRequestDTO.getTitle())
@@ -61,14 +62,18 @@ public class BookClubServiceImpl implements BookClubService {
 
 		bookClubRepository.save(bookClub);
 
-		UserBookClub userBookClub = UserBookClub.builder().user(findUser(1L)).bookClub(bookClub).isOwner(true).build();
+		UserBookClub userBookClub = UserBookClub.builder()
+			.user(findUser(userId))
+			.bookClub(bookClub)
+			.isOwner(true)
+			.build();
 
 		userBookClubRepository.save(userBookClub);
 	}
 
 	@Override
 	@Transactional
-	public void createBookClubTogether(BookClubTogetherRequestDTO bookClubTogetherRequestDTO) {
+	public void createBookClubTogether(BookClubTogetherRequestDTO bookClubTogetherRequestDTO, Long userId) {
 
 		BookClub bookClub = BookClub.builder()
 			.title(bookClubTogetherRequestDTO.getTitle())
@@ -82,14 +87,21 @@ public class BookClubServiceImpl implements BookClubService {
 
 		bookClubRepository.save(bookClub);
 
-		UserBookClub userBookClub = UserBookClub.builder().user(findUser(1L)).bookClub(bookClub).isOwner(true).build();
+		UserBookClub userBookClub = UserBookClub.builder()
+			.user(findUser(userId))
+			.bookClub(bookClub)
+			.isOwner(true)
+			.build();
 
 		Book book = Book.builder()
-			.user(findUser(1L))
+			.user(findUser(userId))
 			.bookClub(bookClub)
 			.title(bookClubTogetherRequestDTO.getBookTitle())
 			.author(bookClubTogetherRequestDTO.getAuthor())
 			.totalPage(bookClubTogetherRequestDTO.getTotalPage())
+			.readPage(0)
+			.goalDayPage(0)
+			.status(ReadStatus.IN_PROGRESS)
 			.profile(bookClubTogetherRequestDTO.getProfile())
 			.build();
 
@@ -100,9 +112,9 @@ public class BookClubServiceImpl implements BookClubService {
 
 	@Override
 	@Transactional
-	public void joinBookClub(Long bookclubId) {
+	public void joinBookClub(Long bookclubId, Long userId) {
 
-		User user = findUser(6L);
+		User user = findUser(userId);
 
 		BookClub bookClub = bookClubRepository.findById(bookclubId)
 			.orElseThrow(() -> new IllegalArgumentException("Not Found BookClub By bookclubId"));
@@ -125,6 +137,9 @@ public class BookClubServiceImpl implements BookClubService {
 				.author(book.get().getAuthor())
 				.totalPage(book.get().getTotalPage())
 				.profile(book.get().getProfile())
+				.status(ReadStatus.IN_PROGRESS)
+				.goalDayPage(0)
+				.readPage(0)
 				.build();
 
 			bookRepository.save(newBook);
@@ -220,8 +235,8 @@ public class BookClubServiceImpl implements BookClubService {
 	}
 
 	@Override
-	public List<BookClubJoinedDTO> getJoinedBookClubs() {
-		User user = userRepository.findById(6L)
+	public List<BookClubJoinedDTO> getJoinedBookClubs(Long userId) {
+		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new IllegalArgumentException("Not Found User By userId"));
 
 		List<BookClub> bookClubs = bookClubRepository.findByUser(user);
@@ -243,9 +258,9 @@ public class BookClubServiceImpl implements BookClubService {
 	}
 
 	@Override
-	public List<BookClubJoinDTO> getjoinBookClubs() {
+	public List<BookClubJoinDTO> getjoinBookClubs(Long userId) {
 
-		User user = userRepository.findById(6L)
+		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new IllegalArgumentException("Not Found User By userId"));
 
 		List<BookClub> bookClubs = bookClubRepository.findByUser(user);
