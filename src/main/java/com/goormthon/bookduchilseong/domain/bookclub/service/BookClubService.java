@@ -5,6 +5,7 @@ import java.util.List;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubOnlyRequestDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubTogetherRequestDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubDetailDTO;
+import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubGalleryDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubProgressDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubResponseDTO;
 
@@ -21,4 +22,6 @@ public interface BookClubService {
 	BookClubDetailDTO getBookClub(Long bookclubId);
 
 	List<BookClubProgressDTO> getBookClubProgresses(Long bookclubId);
+
+	List<BookClubGalleryDTO> getBookClubGallery(Long bookclubId);
 }

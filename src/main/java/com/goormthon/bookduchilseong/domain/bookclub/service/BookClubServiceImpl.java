@@ -2,6 +2,7 @@ package com.goormthon.bookduchilseong.domain.bookclub.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -14,13 +15,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubOnlyRequestDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubTogetherRequestDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubDetailDTO;
+import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubGalleryDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubProgressDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubResponseDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.entity.Book;
 import com.goormthon.bookduchilseong.domain.bookclub.entity.BookClub;
+import com.goormthon.bookduchilseong.domain.bookclub.entity.Certification;
 import com.goormthon.bookduchilseong.domain.bookclub.entity.User;
 import com.goormthon.bookduchilseong.domain.bookclub.repository.BookClubRepository;
 import com.goormthon.bookduchilseong.domain.bookclub.repository.BookRepository;
+import com.goormthon.bookduchilseong.domain.bookclub.repository.CertificationRepository;
 import com.goormthon.bookduchilseong.domain.bookclub.repository.UserRepository;
 import com.goormthon.bookduchilseong.domain.userbookclub.entity.UserBookClub;
 import com.goormthon.bookduchilseong.domain.userbookclub.repository.UserBookClubRepository;
@@ -37,6 +41,7 @@ public class BookClubServiceImpl implements BookClubService {
 	private final UserRepository userRepository;
 	private final UserBookClubRepository userBookClubRepository;
 	private final BookRepository bookRepository;
+	private final CertificationRepository certificationRepository;
 
 	@Override
 	@Transactional
@@ -161,6 +166,7 @@ public class BookClubServiceImpl implements BookClubService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<BookClubProgressDTO> getBookClubProgresses(Long bookclubId) {
 
 		BookClub bookClub = bookClubRepository.findById(bookclubId)
@@ -173,7 +179,6 @@ public class BookClubServiceImpl implements BookClubService {
 
 		List<BookClubProgressDTO> progressDTOs = userBookClubs.stream().map(userBookClub -> {
 			User user = userBookClub.getUser();
-			log.info("user: {}", user.getName());
 
 			Book book = bookRepository.findByBookClubAndUser(bookClub, user)
 				.orElseThrow(() -> new IllegalArgumentException("Not Found Book By bookClub and user"));
@@ -189,6 +194,27 @@ public class BookClubServiceImpl implements BookClubService {
 		}).collect(Collectors.toList());
 
 		return progressDTOs;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<BookClubGalleryDTO> getBookClubGallery(Long bookclubId) {
+
+		BookClub bookClub = bookClubRepository.findById(bookclubId)
+			.orElseThrow(() -> new IllegalArgumentException("Not Found BookClub By bookclubId"));
+
+		List<Book> book = bookRepository.findBooksByBookClub(bookClub);
+
+		List<Certification> certifications = certificationRepository.findByBook(book.get(0));
+
+		Map<LocalDate, List<String>> groupedImages = certifications.stream()
+			.collect(Collectors.groupingBy(certification -> certification.getCreatedAt().toLocalDate(),
+				Collectors.mapping(Certification::getImage, Collectors.toList())));
+
+		return groupedImages.entrySet()
+			.stream()
+			.map(entry -> BookClubGalleryDTO.builder().date(entry.getKey()).image(entry.getValue()).build())
+			.collect(Collectors.toList());
 	}
 
 	private User findUser(Long userId) {
