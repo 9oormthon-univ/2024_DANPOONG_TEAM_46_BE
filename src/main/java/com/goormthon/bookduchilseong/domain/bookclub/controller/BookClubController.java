@@ -99,4 +99,24 @@ public class BookClubController {
 			return ApiResponse.onFailure("500", "북클럽 갤러리 조회 실패", null);
 		}
 	}
+
+	@GetMapping("/joined")
+	public ApiResponse<?> getJoinedBookClubs() {
+		try {
+			return ApiResponse.onSuccess(bookClubService.getJoinedBookClubs());
+		} catch (Exception e) {
+			log.info(e.getMessage());
+			return ApiResponse.onFailure("500", "이전 가입했던 북클럽 조회 실패", null);
+		}
+	}
+
+	@GetMapping("/join")
+	public ApiResponse<?> getJoinBookClubs() {
+		try {
+			return ApiResponse.onSuccess(bookClubService.getjoinBookClubs());
+		} catch (Exception e) {
+			log.info(e.getMessage());
+			return ApiResponse.onFailure("500", "가입한 북클럽 조회 실패", null);
+		}
+	}
 }

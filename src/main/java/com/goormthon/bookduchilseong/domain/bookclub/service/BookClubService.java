@@ -6,6 +6,8 @@ import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubOnlyReq
 import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubTogetherRequestDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubDetailDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubGalleryDTO;
+import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubJoinDTO;
+import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubJoinedDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubProgressDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubResponseDTO;
 
@@ -24,4 +26,8 @@ public interface BookClubService {
 	List<BookClubProgressDTO> getBookClubProgresses(Long bookclubId);
 
 	List<BookClubGalleryDTO> getBookClubGallery(Long bookclubId);
+
+	List<BookClubJoinedDTO> getJoinedBookClubs();
+
+	List<BookClubJoinDTO> getjoinBookClubs();
 }

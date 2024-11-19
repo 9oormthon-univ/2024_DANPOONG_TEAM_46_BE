@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubResponseDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.entity.BookClub;
+import com.goormthon.bookduchilseong.domain.bookclub.entity.User;
 
 @Repository
 public interface BookClubRepository extends JpaRepository<BookClub, Long> {
@@ -20,4 +21,7 @@ public interface BookClubRepository extends JpaRepository<BookClub, Long> {
 	List<BookClubResponseDTO> findBookClubs(Pageable pageable);
 
 	Optional<BookClub> findById(Long id);
+
+	@Query("SELECT ubc.bookClub FROM UserBookClub ubc WHERE ubc.user = :user")
+	List<BookClub> findByUser(User user);
 }

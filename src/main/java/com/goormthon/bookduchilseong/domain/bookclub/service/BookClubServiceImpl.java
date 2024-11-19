@@ -16,6 +16,8 @@ import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubOnlyReq
 import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubTogetherRequestDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubDetailDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubGalleryDTO;
+import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubJoinDTO;
+import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubJoinedDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubProgressDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubResponseDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.entity.Book;
@@ -215,6 +217,56 @@ public class BookClubServiceImpl implements BookClubService {
 			.stream()
 			.map(entry -> BookClubGalleryDTO.builder().date(entry.getKey()).image(entry.getValue()).build())
 			.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<BookClubJoinedDTO> getJoinedBookClubs() {
+		User user = userRepository.findById(6L)
+			.orElseThrow(() -> new IllegalArgumentException("Not Found User By userId"));
+
+		List<BookClub> bookClubs = bookClubRepository.findByUser(user);
+
+		List<BookClubJoinedDTO> joinedDTOs = bookClubs.stream()
+			.filter(bookClub -> bookClub.getEndDate().isBefore(LocalDate.now()))
+			.map(bookClub -> BookClubJoinedDTO.builder()
+				.id(bookClub.getId())
+				.title(bookClub.getTitle())
+				.maxParticipant(bookClub.getMaxParticipant())
+				.participateCount(bookClub.getParticipateCount())
+				.profile(bookClub.getProfile())
+				.startDate(bookClub.getStartDate())
+				.endDate(bookClub.getEndDate())
+				.build())
+			.collect(Collectors.toList());
+
+		return joinedDTOs;
+	}
+
+	@Override
+	public List<BookClubJoinDTO> getjoinBookClubs() {
+
+		User user = userRepository.findById(6L)
+			.orElseThrow(() -> new IllegalArgumentException("Not Found User By userId"));
+
+		List<BookClub> bookClubs = bookClubRepository.findByUser(user);
+
+		String bookTitle = bookClubs.get(0).getTitle();
+
+		List<BookClubJoinDTO> joinDTOs = bookClubs.stream()
+			.filter(bookClub -> bookClub.getEndDate().isAfter(LocalDate.now()))
+			.map(bookClub -> BookClubJoinDTO.builder()
+				.id(bookClub.getId())
+				.title(bookClub.getTitle())
+				.bookTitle(bookTitle)
+				.maxParticipant(bookClub.getMaxParticipant())
+				.participateCount(bookClub.getParticipateCount())
+				.profile(bookClub.getProfile())
+				.startDate(bookClub.getStartDate())
+				.endDate(bookClub.getEndDate())
+				.build())
+			.collect(Collectors.toList());
+
+		return joinDTOs;
 	}
 
 	private User findUser(Long userId) {
