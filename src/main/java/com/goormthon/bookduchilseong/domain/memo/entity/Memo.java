@@ -1,5 +1,6 @@
 package com.goormthon.bookduchilseong.domain.memo.entity;
 
+import com.goormthon.bookduchilseong.domain.book.entity.Book;
 import com.goormthon.bookduchilseong.global.common.BaseEntity;
 
 import jakarta.persistence.*;
@@ -18,8 +19,9 @@ public class Memo extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;         // 메모 ID
 
-	@Column(name = "bookId", nullable = false)
-	private Long bookId;     // 도서 ID
+	@JoinColumn(name = "book_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Book book; // 도서 ID
 
 	@Column(name = "image", nullable = false)
 	private String image;    // 이미지 URL

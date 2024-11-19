@@ -1,5 +1,6 @@
 package com.goormthon.bookduchilseong.domain.certification.entity;
 
+import com.goormthon.bookduchilseong.domain.book.entity.Book;
 import com.goormthon.bookduchilseong.global.common.BaseEntity;
 
 import jakarta.persistence.*;
@@ -18,8 +19,9 @@ public class Certification extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; // 인증 ID
 
-	@Column(name = "book_id", nullable = false)
-	private Long bookId; // 도서 ID
+	@JoinColumn(name = "book_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Book book; // 도서 ID
 
 	@Column(name = "start_page", nullable = false)
 	private Integer startPage; // 시작 페이지

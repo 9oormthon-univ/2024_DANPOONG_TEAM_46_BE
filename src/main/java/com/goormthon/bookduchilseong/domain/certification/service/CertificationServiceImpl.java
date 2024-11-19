@@ -1,5 +1,8 @@
 package com.goormthon.bookduchilseong.domain.certification.service;
 
+import com.goormthon.bookduchilseong.domain.book.entity.Book;
+import com.goormthon.bookduchilseong.domain.book.repository.BookRepository;
+import com.goormthon.bookduchilseong.domain.book.service.BookService;
 import com.goormthon.bookduchilseong.domain.certification.dto.CertificationRequestDto;
 import com.goormthon.bookduchilseong.domain.certification.entity.Certification;
 import com.goormthon.bookduchilseong.domain.certification.repository.CertificationRepository;
@@ -13,12 +16,13 @@ import org.springframework.stereotype.Service;
 public class CertificationServiceImpl implements CertificationService {
 
 	private final CertificationRepository certificationRepository;
+	private final BookRepository bookRepository;
 
 	@Override
 	public ApiResponse<String> createCertification(Long bookId, CertificationRequestDto requestDto) {
 		// Certification 엔티티 생성 및 저장
 		Certification certification = Certification.builder()
-			.bookId(bookId)
+			.book(findBookById(bookId))
 			.startPage(requestDto.getStartPage())
 			.endPage(requestDto.getEndPage())
 			.image(requestDto.getImage())
@@ -27,7 +31,16 @@ public class CertificationServiceImpl implements CertificationService {
 
 		certificationRepository.save(certification);
 
+		Book book = findBookById(bookId);
+		book.setReadPage(requestDto.getEndPage());
+		bookRepository.save(book);
+
 		// 성공 응답 반환
 		return ApiResponse.onSuccess("도서 인증하기 성공");
+	}
+
+	private Book findBookById(Long bookId) {
+		return bookRepository.findById(bookId)
+			.orElseThrow(() -> new RuntimeException("해당 도서를 찾을 수 없습니다."));
 	}
 }

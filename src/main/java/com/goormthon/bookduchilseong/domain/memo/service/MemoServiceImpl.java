@@ -2,6 +2,8 @@ package com.goormthon.bookduchilseong.domain.memo.service;
 
 import org.springframework.stereotype.Service;
 
+import com.goormthon.bookduchilseong.domain.book.entity.Book;
+import com.goormthon.bookduchilseong.domain.book.repository.BookRepository;
 import com.goormthon.bookduchilseong.domain.memo.dto.MemoRequestDto;
 import com.goormthon.bookduchilseong.domain.memo.entity.Memo;
 import com.goormthon.bookduchilseong.domain.memo.repository.MemoRepository;
@@ -14,12 +16,13 @@ import lombok.RequiredArgsConstructor;
 public class MemoServiceImpl implements MemoService {
 
 	private final MemoRepository memoRepository;
+	private final BookRepository bookRepository;
 
 	@Override
 	public ApiResponse<?> createMemo(MemoRequestDto requestDto) {
 		// Certification 엔티티 생성 및 저장
 		Memo memo = Memo.builder()
-			.bookId(requestDto.getBookId())
+			.book(findBookById(requestDto.getBookId()))
 			.image(requestDto.getImage())
 			.content(requestDto.getContent())
 			.build();
@@ -29,5 +32,10 @@ public class MemoServiceImpl implements MemoService {
 
 		// 성공 응답 반환
 		return ApiResponse.onSuccess("메모 추가 성공");
+	}
+
+	private Book findBookById(Long bookId) {
+		return bookRepository.findById(bookId)
+			.orElseThrow(() -> new RuntimeException("해당 도서를 찾을 수 없습니다."));
 	}
 }
