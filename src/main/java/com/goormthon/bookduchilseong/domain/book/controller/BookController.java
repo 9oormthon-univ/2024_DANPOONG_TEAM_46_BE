@@ -1,8 +1,10 @@
-package com.goormthon.bookduchilseong.domain.book.entity.book.dto.request.book.controller;
+package com.goormthon.bookduchilseong.domain.book.controller;
 
-import com.goormthon.bookduchilseong.domain.book.entity.book.dto.request.book.dto.request.BookRequestDto;
-import com.goormthon.bookduchilseong.domain.book.entity.book.dto.request.book.dto.request.BookResponseDto;
-import com.goormthon.bookduchilseong.domain.book.entity.book.dto.request.book.service.BookService;
+import com.goormthon.bookduchilseong.domain.book.dto.request.BookRequestDto;
+import com.goormthon.bookduchilseong.domain.book.dto.request.BookResponseDto;
+import com.goormthon.bookduchilseong.domain.book.entity.Book;
+import com.goormthon.bookduchilseong.domain.book.entity.ReadStatus;
+import com.goormthon.bookduchilseong.domain.book.service.BookService;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

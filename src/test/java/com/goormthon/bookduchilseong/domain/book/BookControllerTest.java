@@ -1,7 +1,7 @@
 package com.goormthon.bookduchilseong.domain.book;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.goormthon.bookduchilseong.domain.BookController;
+import com.goormthon.bookduchilseong.domain.book.controller.BookController;
 import com.goormthon.bookduchilseong.domain.book.dto.request.BookRequestDto;
 import com.goormthon.bookduchilseong.domain.book.dto.request.BookResponseDto;
 import com.goormthon.bookduchilseong.domain.book.entity.ReadStatus;
