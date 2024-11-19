@@ -1,7 +1,7 @@
 package com.goormthon.bookduchilseong.domain.userbookclub.entity;
 
 import com.goormthon.bookduchilseong.domain.bookclub.entity.BookClub;
-import com.goormthon.bookduchilseong.domain.bookclub.entity.User;
+import com.goormthon.bookduchilseong.domain.user.entity.User;
 import com.goormthon.bookduchilseong.global.common.BaseEntity;
 
 import jakarta.persistence.Column;

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubResponseDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.entity.BookClub;
-import com.goormthon.bookduchilseong.domain.bookclub.entity.User;
+import com.goormthon.bookduchilseong.domain.user.entity.User;
 
 @Repository
 public interface BookClubRepository extends JpaRepository<BookClub, Long> {

@@ -12,6 +12,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.goormthon.bookduchilseong.domain.book.entity.Book;
+import com.goormthon.bookduchilseong.domain.book.repository.BookRepository;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubOnlyRequestDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubTogetherRequestDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubDetailDTO;
@@ -20,14 +22,12 @@ import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubJoinDT
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubJoinedDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubProgressDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubResponseDTO;
-import com.goormthon.bookduchilseong.domain.bookclub.entity.Book;
 import com.goormthon.bookduchilseong.domain.bookclub.entity.BookClub;
-import com.goormthon.bookduchilseong.domain.bookclub.entity.Certification;
-import com.goormthon.bookduchilseong.domain.bookclub.entity.User;
 import com.goormthon.bookduchilseong.domain.bookclub.repository.BookClubRepository;
-import com.goormthon.bookduchilseong.domain.bookclub.repository.BookRepository;
-import com.goormthon.bookduchilseong.domain.bookclub.repository.CertificationRepository;
-import com.goormthon.bookduchilseong.domain.bookclub.repository.UserRepository;
+import com.goormthon.bookduchilseong.domain.certification.entity.Certification;
+import com.goormthon.bookduchilseong.domain.certification.repository.CertificationRepository;
+import com.goormthon.bookduchilseong.domain.user.entity.User;
+import com.goormthon.bookduchilseong.domain.user.repository.UserRepository;
 import com.goormthon.bookduchilseong.domain.userbookclub.entity.UserBookClub;
 import com.goormthon.bookduchilseong.domain.userbookclub.repository.UserBookClubRepository;
 
@@ -182,7 +182,7 @@ public class BookClubServiceImpl implements BookClubService {
 		List<BookClubProgressDTO> progressDTOs = userBookClubs.stream().map(userBookClub -> {
 			User user = userBookClub.getUser();
 
-			Book book = bookRepository.findByBookClubAndUser(bookClub, user)
+			Book book = Optional.ofNullable(bookRepository.findByBookClubAndUser(bookClub, user))
 				.orElseThrow(() -> new IllegalArgumentException("Not Found Book By bookClub and user"));
 
 			return BookClubProgressDTO.builder()

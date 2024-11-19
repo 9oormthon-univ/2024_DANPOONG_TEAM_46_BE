@@ -13,7 +13,7 @@ public class BookClubProgressDTO {
 	private String name;
 	private String zodiacsigns;
 	private String profile;
-	private int totalPage;
-	private int readPage;
-	private int goalDayPage;
+	private Long totalPage;
+	private Long readPage;
+	private Long goalDayPage;
 }
