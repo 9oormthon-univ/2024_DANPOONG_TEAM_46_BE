@@ -13,8 +13,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
 	List<Book> findByUserId(Long userId);
 
-	Optional<Book> findByBookClubAndUserId(Long bookClubId, Long userId);
-
 	Optional<Book> findByBookClub(BookClub bookClub);
 
 	Book findByBookClubAndUser(BookClub bookClub, User user);
