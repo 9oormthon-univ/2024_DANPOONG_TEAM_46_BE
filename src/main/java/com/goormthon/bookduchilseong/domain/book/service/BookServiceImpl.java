@@ -1,6 +1,5 @@
 package com.goormthon.bookduchilseong.domain.book.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +10,8 @@ import com.goormthon.bookduchilseong.domain.book.dto.request.BookResponseDto;
 import com.goormthon.bookduchilseong.domain.book.entity.Book;
 import com.goormthon.bookduchilseong.domain.book.entity.ReadStatus;
 import com.goormthon.bookduchilseong.domain.book.repository.BookRepository;
+import com.goormthon.bookduchilseong.domain.user.entity.User;
+import com.goormthon.bookduchilseong.domain.user.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,16 +21,18 @@ import lombok.RequiredArgsConstructor;
 public class BookServiceImpl implements BookService {
 
 	private final BookRepository bookRepository;
+	private final UserRepository userRepository;
 
 	@Override
 	public BookResponseDto addBook(BookRequestDto requestDto) {
 		Book book = Book.builder()
-			.userId(requestDto.getUserId())
+			.user(findUserByUserId(requestDto.getUserId()))
 			.title(requestDto.getTitle())
 			.author(requestDto.getAuthor())
 			.totalPage(requestDto.getTotalPage())
 			.goalDayPage(requestDto.getGoalDayPage())
-			.readPage(0L)
+			.readPage(0)
+			.profile(requestDto.getProfile())
 			.status(requestDto.getStatus()) // Enum 값 저장
 			.build();
 		bookRepository.save(book);
@@ -74,11 +77,15 @@ public class BookServiceImpl implements BookService {
 		try {
 			ReadStatus status = ReadStatus.valueOf(readStatus.toUpperCase());
 			book.setStatus(status);
-			book.setUpdateAt(LocalDateTime.now());
 			bookRepository.save(book);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException("유효하지 않은 도서 상태입니다: " + readStatus);
 		}
+	}
+
+	private User findUserByUserId(Long userId) {
+		return userRepository.findById(userId)
+			.orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다."));
 	}
 
 }
