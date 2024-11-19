@@ -2,6 +2,7 @@ package com.goormthon.bookduchilseong.domain.userbookclub.entity;
 
 import com.goormthon.bookduchilseong.domain.bookclub.entity.BookClub;
 import com.goormthon.bookduchilseong.domain.bookclub.entity.User;
+import com.goormthon.bookduchilseong.global.common.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor()
 @NoArgsConstructor
 @Table(name = "user_book_club")
-public class UserBookClub {
+public class UserBookClub extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,6 +2,8 @@ package com.goormthon.bookduchilseong.domain.bookclub.entity;
 
 import java.time.LocalDate;
 
+import com.goormthon.bookduchilseong.global.common.BaseEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor()
 @NoArgsConstructor
 @Table(name = "book_club")
-public class BookClub {
+public class BookClub extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
