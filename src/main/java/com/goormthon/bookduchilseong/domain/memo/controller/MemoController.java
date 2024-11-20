@@ -21,11 +21,6 @@ public class MemoController implements MemoApi{
 
 	@PostMapping
 	public ApiResponse<?> createMemo(@RequestBody MemoRequestDto requestDto) {
-		try {
-			return memoService.createMemo(requestDto);
-		}
-		catch (RuntimeException e){
-			return ApiResponse.onFailure("500", "메모 생성 실패: " + e.getMessage(), null);
-		}
+		return memoService.createMemo(requestDto);
 	}
 }
