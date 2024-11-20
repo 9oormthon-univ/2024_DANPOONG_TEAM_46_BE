@@ -29,7 +29,7 @@ public class ZodiacsignServiceImpl implements ZodiacsignService {
 		List<Zodiacsign> zodiacsign = zodiacsignRepository.findByUser(findUserById(userId));
 
 		return zodiacsign.stream()
-			.map(z -> new ZodiacsignResponseDTO(z.getId(), z.getZodiacsignes(), z.getZodiacsignImg(), z.getStatus()))
+			.map(z -> new ZodiacsignResponseDTO(z.getId(), z.getZodiacsigns(), z.getZodiacsignImg(), z.getStatus()))
 			.collect(Collectors.toList());
 	}
 
@@ -39,8 +39,19 @@ public class ZodiacsignServiceImpl implements ZodiacsignService {
 		Zodiacsign zodiacsign = zodiacsignRepository.findById(zodiacsignId)
 			.orElseThrow(() -> new IllegalArgumentException("Zodiacsign not found"));
 
-		return new ZodiacsignDetailDTO(zodiacsign.getZodiacsignes(), zodiacsign.getZodiacsignImg(), zodiacsign.getUpdatedAt().toLocalDate());
+		return new ZodiacsignDetailDTO(zodiacsign.getZodiacsigns(), zodiacsign.getZodiacsignImg(), zodiacsign.getUpdatedAt().toLocalDate());
 
+	}
+
+	@Override
+	public void updateProfile(Long zodiacsignId, Long userId) {
+		User user = findUserById(userId);
+
+		Zodiacsign zodiacsign = zodiacsignRepository.findById(zodiacsignId)
+			.orElseThrow(() -> new IllegalArgumentException("Zodiacsign not found"));
+
+		user.updateProfile(zodiacsign);
+		userRepository.save(user);
 	}
 
 	private User findUserById(Long userId) {

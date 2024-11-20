@@ -32,7 +32,7 @@ public class Zodiacsign extends BaseEntity {
 
 	@Column(name = "zodiac_sign_name", nullable = false)
 	@Enumerated(EnumType.STRING) // 열거형을 문자열로 저장
-	private Zodiacsigns zodiacsignes;
+	private Zodiacsigns zodiacsigns;
 
 	@Column(name = "status", nullable = false)
 	private Boolean status;
@@ -45,8 +45,8 @@ public class Zodiacsign extends BaseEntity {
 	private User user;
 
 	@Builder
-	public Zodiacsign(Zodiacsigns zodiacsignes, Boolean status, String zodiacsignImg, User user) {
-		this.zodiacsignes = zodiacsignes;
+	public Zodiacsign(Zodiacsigns zodiacsigns, Boolean status, String zodiacsignImg, User user) {
+		this.zodiacsigns = zodiacsigns;
 		this.status = status;
 		this.zodiacsignImg = zodiacsignImg;
 		this.user = user;

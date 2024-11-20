@@ -1,6 +1,8 @@
 package com.goormthon.bookduchilseong.domain.zodiacsign.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,13 +31,24 @@ public class ZodiacsignController {
 		}
 	}
 
-	@GetMapping("/zodiacsigns/{zodiacsignId}")
+	@GetMapping("/{zodiacsignId}")
 	public ApiResponse<?> getDetailZodiacsign(@RequestParam("zodiacsignId") Long zodiacsignId) {
 		try {
 			return ApiResponse.onSuccess(zodiacsignService.getDetailZodiacsign(zodiacsignId));
 		} catch (Exception e) {
 			log.info(e.getMessage());
 			return ApiResponse.onFailure("500", "별자리 조회 실패", null);
+		}
+	}
+	@PostMapping("/{zodiacsignId}/profile")
+	public ApiResponse<?> updateProfile(@PathVariable("zodiacsignId") Long zodiacsignId,
+		@RequestParam("userId") Long userId) {
+		try {
+			zodiacsignService.updateProfile(zodiacsignId, userId);
+			return ApiResponse.onSuccess("프로필 지정 성공");
+		} catch (Exception e) {
+			log.info(e.getMessage());
+			return ApiResponse.onFailure("500", "내 별자리 조회 실패", null);
 		}
 	}
 }

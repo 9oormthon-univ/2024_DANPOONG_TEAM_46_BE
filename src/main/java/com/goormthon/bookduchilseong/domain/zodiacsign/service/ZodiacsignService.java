@@ -9,4 +9,6 @@ public interface ZodiacsignService {
 	List<ZodiacsignResponseDTO> getMyZodiacsigns(Long userId);
 
 	ZodiacsignDetailDTO getDetailZodiacsign(Long zodiacsignId);
+
+	void updateProfile(Long zodiacsignId, Long userId);
 }
