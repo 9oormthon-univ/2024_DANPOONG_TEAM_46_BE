@@ -24,14 +24,7 @@ public class CertificationController implements CertificationApi {
 	public ApiResponse<?> createCertification(
 		@RequestParam(name = "userId") Long userId,
 		@PathVariable Long bookId,
-		@RequestBody CertificationRequestDTO requestDTO) {
-
-		try {
-			return certificationService.createCertification(userId, bookId, requestDTO);
-		} catch (RuntimeException e) {
-			return ApiResponse.onFailure("500", "도서 인증 실패: " + e.getMessage(), null);
-		}
-		@RequestBody CertificationRequestDTO requestDto){
-			return certificationService.createCertification(bookId, requestDto);
-		}
+		@RequestBody CertificationRequestDTO requestDto) {
+		return certificationService.createCertification(userId, bookId, requestDto);
 	}
+}
