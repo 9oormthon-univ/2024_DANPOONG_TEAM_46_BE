@@ -42,6 +42,10 @@ public class User extends BaseEntity {
 		this.zodiacsigns = zodiacsign.getZodiacsigns().name();
 	}
 
+	public void addDraw() {
+		this.draw = draw + 1;
+	}
+
 	public void decreaseDrawCount() {
 		this.draw = this.draw - 1;
 	}
