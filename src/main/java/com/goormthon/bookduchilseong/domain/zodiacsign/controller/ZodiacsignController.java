@@ -1,6 +1,7 @@
 package com.goormthon.bookduchilseong.domain.zodiacsign.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/zodiac-signs")
-public class ZodiacsignController {
+public class ZodiacsignController implements ZodiacsignApi {
 
 	private final ZodiacsignService zodiacsignService;
 
@@ -40,7 +41,7 @@ public class ZodiacsignController {
 			return ApiResponse.onFailure("500", "별자리 조회 실패", null);
 		}
 	}
-	@PostMapping("/{zodiacsignId}/profile")
+	@PatchMapping("/{zodiacsignId}/profile")
 	public ApiResponse<?> updateProfile(@PathVariable("zodiacsignId") Long zodiacsignId,
 		@RequestParam("userId") Long userId) {
 		try {
