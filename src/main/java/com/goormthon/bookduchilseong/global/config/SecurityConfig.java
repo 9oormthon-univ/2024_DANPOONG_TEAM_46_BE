@@ -3,6 +3,7 @@ package com.goormthon.bookduchilseong.global.config;
 // global/config/SecurityConfig.java
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -28,12 +29,15 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable) // 기본 인증 로그인 비활성화
                 .formLogin(AbstractHttpConfigurer::disable) // 기본 login form 비활성화
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화(쿠키 사용 안해서 불필요)
+                .oauth2Login(Customizer.withDefaults()) //oauth2
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // 세션 미사용
+
 
         // Public endpoint 허용
         http.authorizeHttpRequests(authorizeHttpRequests ->
                 authorizeHttpRequests
+                        .requestMatchers("/").permitAll().anyRequest().authenticated() // 모든 경로인가
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers("/api/v1/account/signup").permitAll()
                         .requestMatchers("/api/v1/auth/login").permitAll()
@@ -43,11 +47,6 @@ public class SecurityConfig {
                         .requestMatchers("/**").permitAll() // TODO - 수정
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요
         );
-
-//        http.addFilterBefore(
-//                jwtAuthorizationFilter(),
-//                UsernamePasswordAuthenticationFilter.class
-//        );
 
         return http.build();
     }
