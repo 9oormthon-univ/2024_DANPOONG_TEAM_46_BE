@@ -4,5 +4,5 @@ import com.goormthon.bookduchilseong.domain.certification.dto.CertificationReque
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
 
 public interface CertificationService {
-	ApiResponse<String> createCertification(Long bookId, CertificationRequestDto requestDto);
+	ApiResponse<String> createCertification(Long userId, Long bookId, CertificationRequestDto requestDto);
 }
