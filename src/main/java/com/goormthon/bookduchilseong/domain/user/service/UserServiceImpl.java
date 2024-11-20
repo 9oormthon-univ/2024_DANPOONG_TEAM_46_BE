@@ -46,17 +46,17 @@ public class UserServiceImpl implements UserService {
 //        return newUser0;
         // 2. 기존 사용자 조회
         return userRepository.findByName(kakaoUser.properties().nickname()).orElseGet(() -> {
-                    // 3. 새 사용자 저장
-                    User newUser = new User(
-                            kakaoUser.id(), // ID는 자동 생성
-                            kakaoUser.properties().nickname(),
-                            "0", // 새로운 유저의 경우 뽑기 횟수 => 0
-                            kakaoUser.properties().thumbnailImage(), // 카카오 프로필 이미지
-                            null, // 프로필 별자리 이름 (별자리)
-                            null // 프로필 별자리 uri (별자리)
-                    );
-                    return userRepository.save(newUser);
-                });
+            // 3. 새 사용자 저장
+            User newUser = new User(
+                    kakaoUser.id(), // ID는 자동 생성
+                    kakaoUser.properties().nickname(),
+                    "0", // 새로운 유저의 경우 뽑기 횟수 => 0
+                    kakaoUser.properties().thumbnailImage(), // 카카오 프로필 이미지
+                    null, // 프로필 별자리 이름 (별자리)
+                    null // 프로필 별자리 uri (별자리)
+            );
+            return userRepository.save(newUser);
+        });
     }
 
     @Override
