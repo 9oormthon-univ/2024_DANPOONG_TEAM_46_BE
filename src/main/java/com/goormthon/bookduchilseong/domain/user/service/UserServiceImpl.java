@@ -51,8 +51,6 @@ public class UserServiceImpl {
                 books.size(),
                 bookClubs.size(),
                 myBooks
-
-
         );
 
     }
