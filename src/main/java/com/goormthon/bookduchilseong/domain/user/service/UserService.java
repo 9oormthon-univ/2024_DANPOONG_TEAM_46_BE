@@ -1,4 +1,2 @@
-package com.goormthon.bookduchilseong.domain.user.service;
-
-public class UserService {
+package com.goormthon.bookduchilseong.domain.user.service;public interface UserService {
 }
