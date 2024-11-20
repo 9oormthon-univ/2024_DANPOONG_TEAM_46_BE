@@ -8,6 +8,9 @@ import com.goormthon.bookduchilseong.domain.certification.entity.Certification;
 import com.goormthon.bookduchilseong.domain.certification.repository.CertificationRepository;
 import com.goormthon.bookduchilseong.domain.certification.service.CertificationService;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
+import com.goormthon.bookduchilseong.global.apiPayload.code.status.ErrorStatus;
+import com.goormthon.bookduchilseong.global.apiPayload.exception.GeneralException;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +44,6 @@ public class CertificationServiceImpl implements CertificationService {
 
 	private Book findBookById(Long bookId) {
 		return bookRepository.findById(bookId)
-			.orElseThrow(() -> new RuntimeException("해당 도서를 찾을 수 없습니다."));
+			.orElseThrow(() -> new GeneralException(ErrorStatus._BOOK_NOT_FOUND));
 	}
 }
