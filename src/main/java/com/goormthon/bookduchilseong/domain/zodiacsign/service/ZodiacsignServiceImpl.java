@@ -11,6 +11,8 @@ import com.goormthon.bookduchilseong.domain.zodiacsign.dto.response.ZodiacsignDe
 import com.goormthon.bookduchilseong.domain.zodiacsign.dto.response.ZodiacsignResponseDTO;
 import com.goormthon.bookduchilseong.domain.zodiacsign.entity.Zodiacsign;
 import com.goormthon.bookduchilseong.domain.zodiacsign.repository.ZodiacsignRepository;
+import com.goormthon.bookduchilseong.global.apiPayload.code.status.ErrorStatus;
+import com.goormthon.bookduchilseong.global.apiPayload.exception.GeneralException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +27,6 @@ public class ZodiacsignServiceImpl implements ZodiacsignService {
 
 	@Override
 	public List<ZodiacsignResponseDTO> getMyZodiacsigns(Long userId) {
-
 		List<Zodiacsign> zodiacsign = zodiacsignRepository.findByUser(findUserById(userId));
 
 		return zodiacsign.stream()
@@ -35,11 +36,10 @@ public class ZodiacsignServiceImpl implements ZodiacsignService {
 
 	@Override
 	public ZodiacsignDetailDTO getDetailZodiacsign(Long zodiacsignId) {
+		Zodiacsign zodiacsign = findZodiacsignById(zodiacsignId);
 
-		Zodiacsign zodiacsign = zodiacsignRepository.findById(zodiacsignId)
-			.orElseThrow(() -> new IllegalArgumentException("Zodiacsign not found"));
-
-		return new ZodiacsignDetailDTO(zodiacsign.getZodiacsigns(), zodiacsign.getZodiacsignImg(), zodiacsign.getUpdatedAt().toLocalDate());
+		return new ZodiacsignDetailDTO(zodiacsign.getZodiacsigns(), zodiacsign.getZodiacsignImg(),
+			zodiacsign.getUpdatedAt().toLocalDate());
 
 	}
 
@@ -47,14 +47,19 @@ public class ZodiacsignServiceImpl implements ZodiacsignService {
 	public void updateProfile(Long zodiacsignId, Long userId) {
 		User user = findUserById(userId);
 
-		Zodiacsign zodiacsign = zodiacsignRepository.findById(zodiacsignId)
-			.orElseThrow(() -> new IllegalArgumentException("Zodiacsign not found"));
+		Zodiacsign zodiacsign = findZodiacsignById(zodiacsignId);
 
 		user.updateProfile(zodiacsign);
 		userRepository.save(user);
 	}
 
 	private User findUserById(Long userId) {
-		return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+		return userRepository.findById(userId)
+			.orElseThrow(() -> new GeneralException(ErrorStatus._USER_NOT_FOUND));
+	}
+
+	private Zodiacsign findZodiacsignById(Long zodiacsignId) {
+		return zodiacsignRepository.findById(zodiacsignId)
+			.orElseThrow(() -> new GeneralException(ErrorStatus._ZODIACSIGN_NOT_FOUND));
 	}
 }
