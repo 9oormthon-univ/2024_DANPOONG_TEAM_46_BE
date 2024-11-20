@@ -1,5 +1,6 @@
 package com.goormthon.bookduchilseong.domain.user.entity;
 
+import com.goormthon.bookduchilseong.domain.zodiacsign.entity.Zodiacsign;
 import com.goormthon.bookduchilseong.global.common.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -29,10 +30,14 @@ public class User extends BaseEntity {
 	@Column(name = "draw", nullable = false)
 	private String draw;
 
-	@Column(name = "profile", nullable = false)
+	@Column(name = "profile", nullable = true)
 	private String profile;
 
-	@Column(name = "zodiacsigns", nullable = false)
+	@Column(name = "zodiacsigns", nullable = true)
 	private String zodiacsigns;
 
+	public void updateProfile(Zodiacsign zodiacsign) {
+		this.profile = zodiacsign.getZodiacsignImg();
+		this.zodiacsigns = zodiacsign.getZodiacsigns().name();
+	}
 }
