@@ -23,22 +23,23 @@ public class User extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id; // 유저 ID
+	private Long id;
 
 	@Column(name = "name", nullable = false)
 	private String name; // 유저 이름
 
 	@Column(name = "draw", nullable = false)
-	private String draw; // 뽑기
+	private int draw; // 뽑기
 
 	@Column(name = "kakaothumbnail", nullable = true)
 	private String kakaothumbnail;
 
 	@Column(name = "profile", nullable = true)
-	private String profile;
+	private String profile; //프로필 별자리 이름(nullable)
 
 	@Column(name = "zodiacsigns", nullable = true)
-	private String zodiacsigns;
+	private String zodiacsigns; // 프로필(nullable)
+
 
 	public void updateProfile(Zodiacsign zodiacsign) {
 		this.profile = zodiacsign.getZodiacsignImg();
