@@ -31,8 +31,7 @@ public class JwtTokenProvider {
     private String jwtSecret;
 
     private final long ACCESS_TOKEN_VALIDITY = 1*30*60*1000L; // 30분
-
-    public static final long REFRESH_TOKEN_VALIDITY = 24*60*60*1000L; // 24시간
+    public static final long REFRESH_TOKEN_VALIDITY = 7*24*60*60*1000L; // 7일
 
     public static final String AUTHORIZATION_KEY = "auth";
     public static final String USER_ID_KEY = "userId";
@@ -59,15 +58,6 @@ public class JwtTokenProvider {
         );
     }
 
-//    public String createAccessTokenWithAccountEntity(Account account) {
-//        return createToken(
-//                account.getId(),
-//                Collections.singletonList(
-//                        new SimpleGrantedAuthority(String.valueOf(account.getRole()))
-//                ),
-//                ACCESS_TOKEN_VALIDITY
-//        );
-//    }
 
     public String createRefreshToken(Authentication authentication) {
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -77,16 +67,6 @@ public class JwtTokenProvider {
                 REFRESH_TOKEN_VALIDITY
         );
     }
-
-//    public String createRefreshTokenWithAccountEntity(Account account) {
-//        return createToken(
-//                account.getId(),
-//                Collections.singletonList(
-//                        new SimpleGrantedAuthority(String.valueOf(account.getRole()))
-//                ),
-//                REFRESH_TOKEN_VALIDITY
-//        );
-//    }
 
     private String createToken(
             Long accountId,
