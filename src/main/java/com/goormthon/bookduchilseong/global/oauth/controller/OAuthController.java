@@ -1,8 +1,8 @@
 package com.goormthon.bookduchilseong.global.oauth.controller;
 
-import com.example.mymoo.global.oauth.dto.response.KakaoLoginResponseDto;
-import com.example.mymoo.global.oauth.dto.response.KakaoLoginUrlResponseDto;
-import com.example.mymoo.global.oauth.service.OAuthService;
+import com.goormthon.bookduchilseong.global.oauth.dto.response.KakaoLoginResponseDto;
+import com.goormthon.bookduchilseong.global.oauth.dto.response.KakaoLoginUrlResponseDto;
+import com.goormthon.bookduchilseong.global.oauth.service.OAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,30 +20,33 @@ public class OAuthController {
     private final OAuthService oAuthService;
 
     @Operation(
-            summary = "[공통] 카카오 로그인",
-            description = "카카오 로그인 화면 URL을 반환합니다. 해당 URL로 이동해주세요.",
+            summary = "[공통] 카카오 로그인 URL 반환",
+            description = "클라이언트가 카카오 로그인 화면으로 이동할 수 있는 URL을 반환합니다. 해당 URL로 이동하여 카카오 인증을 진행하십시오.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "이동 후 사용자가 카카오 로그인을 마칠 시 카카오 인증 서버는 /kakao/callback으로 redirect 시킵니다."),
+                    @ApiResponse(responseCode = "200", description = "카카오 로그인 URL 반환 성공")
             }
     )
     @GetMapping("/kakao")
     public ResponseEntity<KakaoLoginUrlResponseDto> kakaoLogin() {
+        String authorizationUrl = oAuthService.getKakaoAuthorizationUrl();
         return ResponseEntity.ok(
                 KakaoLoginUrlResponseDto.builder()
-                        .authorizationUrl(oAuthService.getKakaoAuthorizationUrl())
+                        .authorizationUrl(authorizationUrl)
                         .build()
         );
     }
 
     @Operation(
-            summary = "[공통] 카카오 서버가 사용자로 하여금 redirect 시키는 API endpoint",
-            description = "서버의 redirect 응답을 그대로 수행하면, 해당 API로 인가 코드와 함께 요청을 보내고, 서버는 카카오 계정 정보를 이용해 로그인 또는 회원가입 절차(id, pw 저장)를 처리해 결과를 반환합니다.",
+            summary = "[공통] 카카오 콜백 처리",
+            description = "카카오 인증 서버가 리다이렉트한 사용자 요청을 처리합니다. 요청에 포함된 인증 코드를 이용해 로그인 또는 회원가입을 수행하고, 결과를 반환합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "isNewUser는 신규 회원인지의 여부. 신규 회원이라면 음식점|후원자|결식아동 중 하나를 선택하라는 화면으로 이동."),
+                    @ApiResponse(responseCode = "200", description = "로그인 또는 회원가입 성공 시 사용자 정보 반환"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청 또는 인증 실패")
             }
     )
     @GetMapping("/kakao/callback")
     public ResponseEntity<KakaoLoginResponseDto> kakaoCallback(@RequestParam("code") String code) {
-        return ResponseEntity.ok(oAuthService.processKakaoCallback(code));
+        KakaoLoginResponseDto response = oAuthService.processKakaoCallback(code);
+        return ResponseEntity.ok(response);
     }
 }
