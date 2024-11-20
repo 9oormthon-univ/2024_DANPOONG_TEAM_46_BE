@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/memos")
 @RequiredArgsConstructor
-public class MemoController {
+public class MemoController implements MemoApi{
 
 	private final MemoService memoService;
 

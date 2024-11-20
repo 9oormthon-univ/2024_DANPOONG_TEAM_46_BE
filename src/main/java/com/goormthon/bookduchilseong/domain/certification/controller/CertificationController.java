@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/books/{bookId}/certification")
 @RequiredArgsConstructor
-public class CertificationController {
+public class CertificationController implements CertificationApi {
 
 	private final CertificationService certificationService;
 
