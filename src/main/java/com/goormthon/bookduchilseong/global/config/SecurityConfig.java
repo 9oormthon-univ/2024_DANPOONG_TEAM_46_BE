@@ -35,9 +35,10 @@ public class SecurityConfig {
 
 
         // Public endpoint 허용
-        http.authorizeHttpRequests(authorizeHttpRequests ->
-                authorizeHttpRequests
-                        .requestMatchers("/").permitAll().anyRequest().authenticated() // 모든 경로인가
+        http.authorizeHttpRequests(auth ->
+                auth
+                        .requestMatchers("/", "/login", "/oauth2/**").permitAll()
+                        .anyRequest().authenticated()
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers("/api/v1/account/signup").permitAll()
                         .requestMatchers("/api/v1/auth/login").permitAll()
@@ -46,6 +47,11 @@ public class SecurityConfig {
                         .requestMatchers("/", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/**").permitAll() // TODO - 수정
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요
+        );
+
+        http.oauth2Login(oauth ->
+                oauth.userInfoEndpoint()
+                        .userService(customOAuth2UserService()) // 사용자 정보 처리 서비스 등록
         );
 
         return http.build();
