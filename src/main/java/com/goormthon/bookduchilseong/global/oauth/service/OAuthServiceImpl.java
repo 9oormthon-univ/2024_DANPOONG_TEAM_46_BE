@@ -66,7 +66,6 @@ public class OAuthServiceImpl implements OAuthService {
 
         return KakaoLoginResponseDto.builder()
                 .accountId(1L) // Mock 데이터
-                .userRole("USER") // Mock 데이터
                 .accessToken(tokenResponse.accessToken()) // 실제 액세스 토큰
                 .refreshToken(tokenResponse.refreshToken()) // 실제 리프레시 토큰
 //                .accessToken(kakaoAccessToken)
