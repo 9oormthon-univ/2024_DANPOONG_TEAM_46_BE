@@ -1,5 +1,7 @@
 package com.goormthon.bookduchilseong.domain.zodiacsign.dto.response;
 
+import java.time.LocalDate;
+
 import com.goormthon.bookduchilseong.domain.zodiacsign.entity.Zodiacsigns;
 
 import lombok.AllArgsConstructor;
@@ -11,9 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ZodiacsignResponseDTO {
-	private Long id;
-	private Zodiacsigns zodiacSign;
+public class ZodiacsignDetailDTO {
+	private Zodiacsigns zodiacSignName;
 	private String zodiacSignImg;
-	private Boolean status;
+	private LocalDate createdAt;
 }
