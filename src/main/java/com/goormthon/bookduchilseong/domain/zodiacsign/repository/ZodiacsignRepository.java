@@ -14,6 +14,8 @@ import com.goormthon.bookduchilseong.domain.zodiacsign.entity.Zodiacsign;
 public interface ZodiacsignRepository extends JpaRepository<Zodiacsign, Long> {
 	List<Zodiacsign> findByUser(User user);
 
+	int countByUserId(Long userId);
+
 	Optional<Zodiacsign> findById(Long zodiacsignId);
 
 	@Query("SELECT z FROM Zodiacsign z WHERE z.user = :user AND z.status = false")
