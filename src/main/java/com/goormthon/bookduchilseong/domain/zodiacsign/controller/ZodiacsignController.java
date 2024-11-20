@@ -28,4 +28,14 @@ public class ZodiacsignController {
 			return ApiResponse.onFailure("500", "내 별자리 조회 실패", null);
 		}
 	}
+
+	@GetMapping("/zodiacsigns/{zodiacsignId}")
+	public ApiResponse<?> getDetailZodiacsign(@RequestParam("zodiacsignId") Long zodiacsignId) {
+		try {
+			return ApiResponse.onSuccess(zodiacsignService.getDetailZodiacsign(zodiacsignId));
+		} catch (Exception e) {
+			log.info(e.getMessage());
+			return ApiResponse.onFailure("500", "별자리 조회 실패", null);
+		}
+	}
 }

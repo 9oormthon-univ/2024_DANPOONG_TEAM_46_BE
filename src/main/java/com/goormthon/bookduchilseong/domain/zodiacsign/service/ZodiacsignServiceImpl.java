@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.goormthon.bookduchilseong.domain.user.entity.User;
 import com.goormthon.bookduchilseong.domain.user.repository.UserRepository;
+import com.goormthon.bookduchilseong.domain.zodiacsign.dto.response.ZodiacsignDetailDTO;
 import com.goormthon.bookduchilseong.domain.zodiacsign.dto.response.ZodiacsignResponseDTO;
 import com.goormthon.bookduchilseong.domain.zodiacsign.entity.Zodiacsign;
 import com.goormthon.bookduchilseong.domain.zodiacsign.repository.ZodiacsignRepository;
@@ -28,8 +29,18 @@ public class ZodiacsignServiceImpl implements ZodiacsignService {
 		List<Zodiacsign> zodiacsign = zodiacsignRepository.findByUser(findUserById(userId));
 
 		return zodiacsign.stream()
-			.map(z -> new ZodiacsignResponseDTO(z.getZodiacsignes(), z.getZodiacsignImg(), z.getStatus()))
+			.map(z -> new ZodiacsignResponseDTO(z.getId(), z.getZodiacsignes(), z.getZodiacsignImg(), z.getStatus()))
 			.collect(Collectors.toList());
+	}
+
+	@Override
+	public ZodiacsignDetailDTO getDetailZodiacsign(Long zodiacsignId) {
+
+		Zodiacsign zodiacsign = zodiacsignRepository.findById(zodiacsignId)
+			.orElseThrow(() -> new IllegalArgumentException("Zodiacsign not found"));
+
+		return new ZodiacsignDetailDTO(zodiacsign.getZodiacsignes(), zodiacsign.getZodiacsignImg(), zodiacsign.getUpdatedAt().toLocalDate());
+
 	}
 
 	private User findUserById(Long userId) {
