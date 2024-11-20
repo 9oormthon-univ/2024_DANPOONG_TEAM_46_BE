@@ -13,5 +13,7 @@ import com.goormthon.bookduchilseong.domain.zodiacsign.entity.Zodiacsign;
 public interface ZodiacsignRepository extends JpaRepository<Zodiacsign, Long> {
 	List<Zodiacsign> findByUser(User user);
 
+	int countByUserId(Long userId);
+
 	Optional<Zodiacsign> findById(Long zodiacsignId);
 }

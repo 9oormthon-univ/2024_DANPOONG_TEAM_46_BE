@@ -18,7 +18,6 @@ public class UserMyPageReseponseDto {
     public static class MyBook{
         private String title;   // 책 제몬
         private String author;  // 저자
-        private int startPoint; // 시작 페이지
         private int totalPage;  // 전체 페이지
         private int readPage;   // 현재 읽은 페이지
         private int progress;   // 진행도(퍼센트)
