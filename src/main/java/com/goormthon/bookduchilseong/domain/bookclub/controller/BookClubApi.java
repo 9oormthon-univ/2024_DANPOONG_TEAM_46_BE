@@ -68,7 +68,7 @@ public interface BookClubApi {
 		@PathVariable Long bookclubId
 	);
 
-	@Operation(summary = "사용자가 가입한 북클럽 목록 조회", description = "사용자가 이전에 가입했던 북클럽 목록을 조회합니다.")
+	@Operation(summary = "사용자가 이전에 가입한 북클럽 목록 조회", description = "사용자가 이전에 가입했던 북클럽 목록을 조회합니다.")
 	@GetMapping("/joined")
 	ApiResponse<?> getJoinedBookClubs(
 		@Parameter(description = "사용자 ID", required = true, example = "1")
