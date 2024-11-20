@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/bookclubs")
-public class BookClubController {
+public class BookClubController implements BookClubApi {
 
 	private final BookClubService bookClubService;
 
