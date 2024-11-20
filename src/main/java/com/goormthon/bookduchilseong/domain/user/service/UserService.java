@@ -8,5 +8,5 @@ public interface UserService {
     String createUser(Authentication authentication);
 
     // 마이페이지 조회
-    UserMyPageReseponseDto getUserMypage(Long userId, Authentication authentication);
+    UserMyPageReseponseDto getUserMypage(Long userId);
 }
