@@ -2,19 +2,18 @@ package com.goormthon.bookduchilseong.domain.certification.service;
 
 import org.springframework.stereotype.Service;
 
-import com.goormthon.bookduchilseong.domain.user.entity.User;
 import com.goormthon.bookduchilseong.domain.book.entity.Book;
 import com.goormthon.bookduchilseong.domain.book.repository.BookRepository;
 import com.goormthon.bookduchilseong.domain.certification.dto.request.CertificationRequestDTO;
 import com.goormthon.bookduchilseong.domain.certification.entity.Certification;
 import com.goormthon.bookduchilseong.domain.certification.repository.CertificationRepository;
+import com.goormthon.bookduchilseong.domain.user.entity.User;
 import com.goormthon.bookduchilseong.domain.user.repository.UserRepository;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
 import com.goormthon.bookduchilseong.global.apiPayload.code.status.ErrorStatus;
 import com.goormthon.bookduchilseong.global.apiPayload.exception.GeneralException;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
