@@ -15,17 +15,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
+
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "book")
 public class Book extends BaseEntity {
 	@Id
@@ -76,7 +76,19 @@ public class Book extends BaseEntity {
 		this.user = user;
 	}
 
+	public void updateReadPage(Integer readPage) {
+		this.readPage = readPage;
+	}
+
+	public void updateReadStatusStatus(ReadStatus status) {
+		this.readPage = readPage;
+	}
+
 	public void setIsDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+
+	public void updateBookclub(BookClub bookClub) {
+		this.bookClub = bookClub;
 	}
 }
