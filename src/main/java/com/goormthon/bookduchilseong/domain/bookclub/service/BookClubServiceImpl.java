@@ -237,6 +237,7 @@ public class BookClubServiceImpl implements BookClubService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<BookClubJoinedDTO> getJoinedBookClubs(Long userId) {
 
 		User user = findUser(userId);
@@ -260,6 +261,7 @@ public class BookClubServiceImpl implements BookClubService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<BookClubJoinDTO> getjoinBookClubs(Long userId) {
 
 		User user = findUser(userId);
