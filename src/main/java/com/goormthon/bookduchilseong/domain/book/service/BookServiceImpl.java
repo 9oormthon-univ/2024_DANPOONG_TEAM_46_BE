@@ -10,6 +10,8 @@ import com.goormthon.bookduchilseong.domain.book.dto.response.BookResponseDTO;
 import com.goormthon.bookduchilseong.domain.book.entity.Book;
 import com.goormthon.bookduchilseong.domain.book.entity.ReadStatus;
 import com.goormthon.bookduchilseong.domain.book.repository.BookRepository;
+import com.goormthon.bookduchilseong.domain.bookclub.entity.BookClub;
+import com.goormthon.bookduchilseong.domain.bookclub.repository.BookClubRepository;
 import com.goormthon.bookduchilseong.domain.user.entity.User;
 import com.goormthon.bookduchilseong.domain.user.repository.UserRepository;
 import com.goormthon.bookduchilseong.global.apiPayload.code.status.ErrorStatus;
@@ -24,6 +26,7 @@ public class BookServiceImpl implements BookService {
 
 	private final BookRepository bookRepository;
 	private final UserRepository userRepository;
+	private final BookClubRepository bookClubRepository;
 
 	@Override
 	public BookResponseDTO addBook(BookRequestDTO requestDto) {
@@ -78,11 +81,23 @@ public class BookServiceImpl implements BookService {
 		// Enum으로 상태 업데이트
 		try {
 			ReadStatus status = ReadStatus.valueOf(readStatus.toUpperCase());
-			book.setStatus(status);
+			book.updateReadStatusStatus(status);
 			bookRepository.save(book);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException("유효하지 않은 도서 상태입니다: " + readStatus);
 		}
+	}
+
+	@Override
+	public void shareBook(Long bookId, Long bookclubId) {
+		Book book = findBookById(bookId);
+
+		BookClub bookClub = bookClubRepository.findById(bookclubId)
+			.orElseThrow(() -> new GeneralException(ErrorStatus._BOOKCLUB_NOT_FOUND));
+
+		book.updateBookclub(bookClub);
+
+		bookRepository.save(book);
 	}
 
 	private User findUserByUserId(Long userId) {

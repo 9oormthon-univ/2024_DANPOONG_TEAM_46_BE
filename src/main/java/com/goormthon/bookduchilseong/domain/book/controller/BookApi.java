@@ -54,4 +54,13 @@ public interface BookApi {
 		@Parameter(description = "변경할 읽기 상태 (예: 'NOT_STARTED', 'IN_PROGRESS', 'COMPLETED')", required = true)
 		@RequestParam("readStatus") String readStatus
 	);
+
+	@Operation(summary = "도서 공유", description = "도서를 팀에 공유합니다.")
+	@PostMapping("/{bookId}/share")
+	ApiResponse<?> shareBook(
+		@Parameter(description = "도서 ID", required = true, example = "1")
+		@PathVariable Long bookId,
+		@Parameter(description = "북클럽 ID", required = true, example = "1")
+		@RequestParam(name = "userId") Long userId
+	);
 }

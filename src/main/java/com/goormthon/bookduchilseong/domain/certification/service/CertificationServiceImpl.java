@@ -1,5 +1,7 @@
 package com.goormthon.bookduchilseong.domain.certification.service;
 
+import org.springframework.stereotype.Service;
+
 import com.goormthon.bookduchilseong.domain.book.entity.Book;
 import com.goormthon.bookduchilseong.domain.book.repository.BookRepository;
 import com.goormthon.bookduchilseong.domain.certification.dto.request.CertificationRequestDTO;
@@ -10,7 +12,6 @@ import com.goormthon.bookduchilseong.global.apiPayload.code.status.ErrorStatus;
 import com.goormthon.bookduchilseong.global.apiPayload.exception.GeneralException;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +34,7 @@ public class CertificationServiceImpl implements CertificationService {
 		certificationRepository.save(certification);
 
 		Book book = findBookById(bookId);
-		book.setReadPage(requestDto.getEndPage());
+		book.updateReadPage(requestDto.getEndPage());
 		bookRepository.save(book);
 
 		// 성공 응답 반환

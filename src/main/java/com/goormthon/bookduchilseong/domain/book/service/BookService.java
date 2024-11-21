@@ -15,4 +15,6 @@ public interface BookService {
 	void deleteBook(Long bookId);
 
 	void updateBookStatus(Long bookId, String readStatus);
+
+	void shareBook(Long bookId, Long bookclubId);
 }

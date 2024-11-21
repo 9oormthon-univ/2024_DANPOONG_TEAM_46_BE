@@ -50,4 +50,11 @@ public class BookController implements BookApi {
 		bookService.updateBookStatus(bookId, readStatus); // 상태 업데이트 처리
 		return ApiResponse.onSuccess("도서 상태가 '" + readStatus + "'로 변경되었습니다.");
 	}
+
+	@PostMapping("/{bookId}/share")
+	public ApiResponse<?> shareBook(@PathVariable Long bookId,
+		@RequestParam(name = "bookclubId") Long bookclubId) {
+		bookService.shareBook(bookId, bookclubId);
+		return ApiResponse.onSuccess("북클럽 공유하기 성공");
+	}
 }

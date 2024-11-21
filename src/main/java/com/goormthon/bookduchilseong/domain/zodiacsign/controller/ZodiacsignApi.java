@@ -1,10 +1,15 @@
 package com.goormthon.bookduchilseong.domain.zodiacsign.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Zodiac Sign API", description = "별자리 관련 API")
 public interface ZodiacsignApi {
@@ -29,6 +34,13 @@ public interface ZodiacsignApi {
 		@Parameter(description = "별자리 ID", required = true)
 		@PathVariable("zodiacsignId") Long zodiacsignId,
 
+		@Parameter(description = "사용자 ID", required = true)
+		@RequestParam("userId") Long userId
+	);
+
+	@Operation(summary = "별자리 뽑기", description = "사용자에게 랜덤으로 별자리를 추첨합니다.")
+	@PostMapping("/draw")
+	ApiResponse<?> drawZodiacsign(
 		@Parameter(description = "사용자 ID", required = true)
 		@RequestParam("userId") Long userId
 	);
