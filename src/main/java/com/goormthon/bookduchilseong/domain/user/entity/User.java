@@ -28,7 +28,7 @@ public class User extends BaseEntity {
 	private String name;
 
 	@Column(name = "draw", nullable = false)
-	private String draw;
+	private int draw;
 
 	@Column(name = "profile", nullable = true)
 	private String profile;
@@ -39,5 +39,9 @@ public class User extends BaseEntity {
 	public void updateProfile(Zodiacsign zodiacsign) {
 		this.profile = zodiacsign.getZodiacsignImg();
 		this.zodiacsigns = zodiacsign.getZodiacsigns().name();
+	}
+
+	public void decreaseDrawCount() {
+		this.draw = this.draw - 1;
 	}
 }

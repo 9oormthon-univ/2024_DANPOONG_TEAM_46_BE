@@ -51,4 +51,10 @@ public class Zodiacsign extends BaseEntity {
 		this.zodiacsignImg = zodiacsignImg;
 		this.user = user;
 	}
+
+	public void updateStatus() {
+		if (!this.status) {
+			this.status = true;
+		}
+	}
 }

@@ -1,6 +1,7 @@
 package com.goormthon.bookduchilseong.domain.zodiacsign.service;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -51,6 +52,37 @@ public class ZodiacsignServiceImpl implements ZodiacsignService {
 
 		user.updateProfile(zodiacsign);
 		userRepository.save(user);
+	}
+
+	@Override
+	public ZodiacsignDetailDTO drawZodiacsign(Long userId) {
+		User user = findUserById(userId);
+		List<Zodiacsign> zodiacsigns = zodiacsignRepository.findByUserAndStatusFalse(user);
+
+		if (zodiacsigns.isEmpty()) {
+			throw new GeneralException(ErrorStatus._ZODIACSIGN_NOT_FOUND);
+		}
+
+		Random random = new Random();
+		int drawIndex = random.nextInt(zodiacsigns.size());
+
+		int drawCnt = user.getDraw();
+		if (drawCnt <= 0) {
+			throw new GeneralException(ErrorStatus._DRAW_COUNT_ZERO);
+		} else {
+			user.decreaseDrawCount();
+			userRepository.save(user);
+
+			Zodiacsign zodiacsign = zodiacsigns.get(drawIndex);
+			zodiacsign.updateStatus();
+			zodiacsignRepository.save(zodiacsign);
+
+			return ZodiacsignDetailDTO.builder()
+				.zodiacSignImg(zodiacsign.getZodiacsignImg())
+				.zodiacSignName(zodiacsign.getZodiacsigns())
+				.createdAt(zodiacsign.getCreatedAt().toLocalDate())
+				.build();
+		}
 	}
 
 	private User findUserById(Long userId) {
