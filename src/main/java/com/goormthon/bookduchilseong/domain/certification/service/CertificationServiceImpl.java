@@ -4,12 +4,14 @@ import org.springframework.stereotype.Service;
 
 import com.goormthon.bookduchilseong.domain.book.entity.Book;
 import com.goormthon.bookduchilseong.domain.book.repository.BookRepository;
-import com.goormthon.bookduchilseong.domain.certification.dto.CertificationRequestDto;
+import com.goormthon.bookduchilseong.domain.certification.dto.request.CertificationRequestDTO;
 import com.goormthon.bookduchilseong.domain.certification.entity.Certification;
 import com.goormthon.bookduchilseong.domain.certification.repository.CertificationRepository;
 import com.goormthon.bookduchilseong.domain.user.entity.User;
 import com.goormthon.bookduchilseong.domain.user.repository.UserRepository;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
+import com.goormthon.bookduchilseong.global.apiPayload.code.status.ErrorStatus;
+import com.goormthon.bookduchilseong.global.apiPayload.exception.GeneralException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +24,7 @@ public class CertificationServiceImpl implements CertificationService {
 	private final UserRepository userRepository;
 
 	@Override
-	public ApiResponse<String> createCertification(Long userId, Long bookId, CertificationRequestDto requestDto) {
+	public ApiResponse<String> createCertification(Long userId, Long bookId, CertificationRequestDTO requestDto) {
 		// Certification 엔티티 생성 및 저장
 		Certification certification = Certification.builder()
 			.book(findBookById(bookId))
@@ -35,7 +37,7 @@ public class CertificationServiceImpl implements CertificationService {
 		certificationRepository.save(certification);
 
 		Book book = findBookById(bookId);
-		book.setReadPage(requestDto.getEndPage());
+		book.updateReadPage(requestDto.getEndPage());
 		bookRepository.save(book);
 
 		if (isCompleteBook(bookId)) {
@@ -53,7 +55,7 @@ public class CertificationServiceImpl implements CertificationService {
 
 	private Book findBookById(Long bookId) {
 		return bookRepository.findById(bookId)
-			.orElseThrow(() -> new RuntimeException("해당 도서를 찾을 수 없습니다."));
+			.orElseThrow(() -> new GeneralException(ErrorStatus._BOOK_NOT_FOUND));
 	}
 
 	private boolean isCompleteBook(Long bookId) {

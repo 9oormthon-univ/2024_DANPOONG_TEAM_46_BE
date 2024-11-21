@@ -9,13 +9,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "user")
 public class User extends BaseEntity {
@@ -43,5 +44,9 @@ public class User extends BaseEntity {
 
 	public void addDraw() {
 		this.draw = draw + 1;
+	}
+
+	public void decreaseDrawCount() {
+		this.draw = this.draw - 1;
 	}
 }

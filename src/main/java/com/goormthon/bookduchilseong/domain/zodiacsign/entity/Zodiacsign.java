@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "zodiac_sign")
 public class Zodiacsign extends BaseEntity {
@@ -50,5 +51,11 @@ public class Zodiacsign extends BaseEntity {
 		this.status = status;
 		this.zodiacsignImg = zodiacsignImg;
 		this.user = user;
+	}
+
+	public void updateStatus() {
+		if (!this.status) {
+			this.status = true;
+		}
 	}
 }

@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +18,8 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@AllArgsConstructor()
-@NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "book_club")
 public class BookClub extends BaseEntity {
 
@@ -32,7 +33,7 @@ public class BookClub extends BaseEntity {
 	@Column(name = "type", nullable = false)
 	private ReadType type;
 
-	@Column(name = "introduction", columnDefinition = "TEXT",  nullable = false)
+	@Column(name = "introduction", columnDefinition = "TEXT", nullable = false)
 	private String introduction;
 
 	@Column(name = "participate_count", nullable = false)
@@ -51,8 +52,8 @@ public class BookClub extends BaseEntity {
 	private String profile;
 
 	@Builder
-	public BookClub(String title, ReadType type, String introduction, LocalDate startDate,
-		LocalDate endDate, int maxParticipant, String profile) {
+	public BookClub(String title, ReadType type, String introduction, LocalDate startDate, LocalDate endDate,
+		int maxParticipant, String profile) {
 		this.title = title;
 		this.type = type;
 		this.introduction = introduction;

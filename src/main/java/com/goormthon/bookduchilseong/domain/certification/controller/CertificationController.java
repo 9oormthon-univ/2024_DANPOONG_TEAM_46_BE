@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.goormthon.bookduchilseong.domain.certification.dto.CertificationRequestDto;
+import com.goormthon.bookduchilseong.domain.certification.dto.request.CertificationRequestDTO;
 import com.goormthon.bookduchilseong.domain.certification.service.CertificationService;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
 
@@ -24,12 +24,7 @@ public class CertificationController implements CertificationApi {
 	public ApiResponse<?> createCertification(
 		@RequestParam(name = "userId") Long userId,
 		@PathVariable Long bookId,
-		@RequestBody CertificationRequestDto requestDto) {
-
-		try {
-			return certificationService.createCertification(userId, bookId, requestDto);
-		} catch (RuntimeException e) {
-			return ApiResponse.onFailure("500", "도서 인증 실패: " + e.getMessage(), null);
-		}
+		@RequestBody CertificationRequestDTO requestDto) {
+		return certificationService.createCertification(userId, bookId, requestDto);
 	}
 }

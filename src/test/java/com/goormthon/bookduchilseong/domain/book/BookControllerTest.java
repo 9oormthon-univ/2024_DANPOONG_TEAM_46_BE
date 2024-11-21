@@ -2,8 +2,8 @@ package com.goormthon.bookduchilseong.domain.book;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goormthon.bookduchilseong.domain.book.controller.BookController;
-import com.goormthon.bookduchilseong.domain.book.dto.request.BookRequestDto;
-import com.goormthon.bookduchilseong.domain.book.dto.request.BookResponseDto;
+import com.goormthon.bookduchilseong.domain.book.dto.request.BookRequestDTO;
+import com.goormthon.bookduchilseong.domain.book.dto.response.BookResponseDTO;
 import com.goormthon.bookduchilseong.domain.book.entity.ReadStatus;
 import com.goormthon.bookduchilseong.domain.book.service.BookService;
 import org.junit.jupiter.api.Test;
@@ -36,23 +36,23 @@ class BookControllerTest {
     @Test
     void addBookTest() throws Exception {
         // Mock 요청 데이터
-        BookRequestDto requestDto = new BookRequestDto();
+        BookRequestDTO requestDto = new BookRequestDTO();
         requestDto.setUserId(1L);
         requestDto.setTitle("채식주의자");
         requestDto.setAuthor("한강");
-        requestDto.setTotalPage(200L);
-        requestDto.setGoalDayPage(20L);
+        requestDto.setTotalPage(200);
+        requestDto.setGoalDayPage(20);
 
         // Mock 응답 데이터
-        BookResponseDto responseDto = new BookResponseDto();
+        BookResponseDTO responseDto = new BookResponseDTO();
         responseDto.setTitle("채식주의자");
         responseDto.setAuthor("한강");
         responseDto.setProgress(0);
-        responseDto.setReadPage(0L);
+        responseDto.setReadPage(0);
         responseDto.setStatus(ReadStatus.NOT_STARTED);
 
         // Mock 동작 정의
-        when(bookService.addBook(any(BookRequestDto.class))).thenReturn(responseDto);
+        when(bookService.addBook(any(BookRequestDTO.class))).thenReturn(responseDto);
 
         // 테스트 수행
         mockMvc.perform(post("/api/v1/books")
@@ -64,27 +64,27 @@ class BookControllerTest {
 
 
         // Mock 동작 검증
-        verify(bookService, times(1)).addBook(any(BookRequestDto.class));
+        verify(bookService, times(1)).addBook(any(BookRequestDTO.class));
     }
 
     @Test
     void getAllBooksTest() throws Exception {
         // Mock 데이터 준비
-        BookResponseDto book1 = new BookResponseDto();
+        BookResponseDTO book1 = new BookResponseDTO();
         book1.setTitle("채식주의자");
         book1.setAuthor("한강");
         book1.setProgress(50);
-        book1.setReadPage(100L);
+        book1.setReadPage(100);
         book1.setStatus(ReadStatus.IN_PROGRESS);
 
-        BookResponseDto book2 = new BookResponseDto();
+        BookResponseDTO book2 = new BookResponseDTO();
         book2.setTitle("데미안");
         book2.setAuthor("헤르만 헤세");
         book2.setProgress(100);
-        book2.setReadPage(200L);
+        book2.setReadPage(200);
         book2.setStatus(ReadStatus.COMPLETED);
 
-        List<BookResponseDto> mockBooks = List.of(book1, book2);
+        List<BookResponseDTO> mockBooks = List.of(book1, book2);
 
         // Mock 동작 정의
         when(bookService.getAllBooks(1L)).thenReturn(mockBooks);
@@ -104,11 +104,11 @@ class BookControllerTest {
     @Test
     void getBookDetail_Success() throws Exception {
         // Mock 데이터 준비
-        BookResponseDto bookDetail = new BookResponseDto();
+        BookResponseDTO bookDetail = new BookResponseDTO();
         bookDetail.setTitle("채식주의자");
         bookDetail.setAuthor("한강");
         bookDetail.setProgress(50);
-        bookDetail.setReadPage(100L);
+        bookDetail.setReadPage(100);
         bookDetail.setStatus(ReadStatus.IN_PROGRESS);
 
         // Mock 동작 정의

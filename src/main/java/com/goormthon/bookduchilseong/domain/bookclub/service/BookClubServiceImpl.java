@@ -31,6 +31,8 @@ import com.goormthon.bookduchilseong.domain.user.entity.User;
 import com.goormthon.bookduchilseong.domain.user.repository.UserRepository;
 import com.goormthon.bookduchilseong.domain.userbookclub.entity.UserBookClub;
 import com.goormthon.bookduchilseong.domain.userbookclub.repository.UserBookClubRepository;
+import com.goormthon.bookduchilseong.global.apiPayload.code.status.ErrorStatus;
+import com.goormthon.bookduchilseong.global.apiPayload.exception.GeneralException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -116,8 +118,7 @@ public class BookClubServiceImpl implements BookClubService {
 
 		User user = findUser(userId);
 
-		BookClub bookClub = bookClubRepository.findById(bookclubId)
-			.orElseThrow(() -> new IllegalArgumentException("Not Found BookClub By bookclubId"));
+		BookClub bookClub = findBookClub(bookclubId);
 
 		if (userBookClubRepository.existsByUserAndBookClub(user, bookClub)) {
 			throw new IllegalArgumentException("Already Joined BookClub");
@@ -162,8 +163,7 @@ public class BookClubServiceImpl implements BookClubService {
 	@Transactional(readOnly = true)
 	public BookClubDetailDTO getBookClub(Long bookclubId) {
 
-		BookClub bookClub = bookClubRepository.findById(bookclubId)
-			.orElseThrow(() -> new IllegalArgumentException("Not Found BookClub By bookclubId"));
+		BookClub bookClub = findBookClub(bookclubId);
 
 		Optional<UserBookClub> ownerUser = userBookClubRepository.findByBookClubAndIsOwner(bookClub, true);
 
@@ -186,8 +186,7 @@ public class BookClubServiceImpl implements BookClubService {
 	@Transactional(readOnly = true)
 	public List<BookClubProgressDTO> getBookClubProgresses(Long bookclubId) {
 
-		BookClub bookClub = bookClubRepository.findById(bookclubId)
-			.orElseThrow(() -> new IllegalArgumentException("Not Found BookClub By bookclubId"));
+		BookClub bookClub = findBookClub(bookclubId);
 
 		List<UserBookClub> userBookClubs = userBookClubRepository.findByBookClub(bookClub);
 		if (userBookClubs.isEmpty()) {
@@ -217,10 +216,13 @@ public class BookClubServiceImpl implements BookClubService {
 	@Transactional(readOnly = true)
 	public List<BookClubGalleryDTO> getBookClubGallery(Long bookclubId) {
 
-		BookClub bookClub = bookClubRepository.findById(bookclubId)
-			.orElseThrow(() -> new IllegalArgumentException("Not Found BookClub By bookclubId"));
+		BookClub bookClub = findBookClub(bookclubId);
 
 		List<Book> book = bookRepository.findBooksByBookClub(bookClub);
+
+		if (book.isEmpty()) {
+			throw new GeneralException(ErrorStatus._BOOK_NOT_FOUND);
+		}
 
 		List<Certification> certifications = certificationRepository.findByBook(book.get(0));
 
@@ -235,9 +237,10 @@ public class BookClubServiceImpl implements BookClubService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<BookClubJoinedDTO> getJoinedBookClubs(Long userId) {
-		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new IllegalArgumentException("Not Found User By userId"));
+
+		User user = findUser(userId);
 
 		List<BookClub> bookClubs = bookClubRepository.findByUser(user);
 
@@ -258,10 +261,10 @@ public class BookClubServiceImpl implements BookClubService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<BookClubJoinDTO> getjoinBookClubs(Long userId) {
 
-		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new IllegalArgumentException("Not Found User By userId"));
+		User user = findUser(userId);
 
 		List<BookClub> bookClubs = bookClubRepository.findByUser(user);
 
@@ -286,7 +289,11 @@ public class BookClubServiceImpl implements BookClubService {
 
 	private User findUser(Long userId) {
 		return userRepository.findById(userId)
-			.orElseThrow(() -> new IllegalArgumentException("Not Found User By userId"));
+			.orElseThrow(() -> new GeneralException(ErrorStatus._USER_NOT_FOUND));
 	}
 
+	private BookClub findBookClub(Long bookclubId) {
+		return bookClubRepository.findById(bookclubId)
+			.orElseThrow(() -> new GeneralException(ErrorStatus._BOOKCLUB_NOT_FOUND));
+	}
 }

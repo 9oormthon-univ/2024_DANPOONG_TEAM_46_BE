@@ -5,13 +5,17 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.goormthon.bookduchilseong.domain.book.dto.request.BookRequestDto;
-import com.goormthon.bookduchilseong.domain.book.dto.request.BookResponseDto;
+import com.goormthon.bookduchilseong.domain.book.dto.request.BookRequestDTO;
+import com.goormthon.bookduchilseong.domain.book.dto.response.BookResponseDTO;
 import com.goormthon.bookduchilseong.domain.book.entity.Book;
 import com.goormthon.bookduchilseong.domain.book.entity.ReadStatus;
 import com.goormthon.bookduchilseong.domain.book.repository.BookRepository;
+import com.goormthon.bookduchilseong.domain.bookclub.entity.BookClub;
+import com.goormthon.bookduchilseong.domain.bookclub.repository.BookClubRepository;
 import com.goormthon.bookduchilseong.domain.user.entity.User;
 import com.goormthon.bookduchilseong.domain.user.repository.UserRepository;
+import com.goormthon.bookduchilseong.global.apiPayload.code.status.ErrorStatus;
+import com.goormthon.bookduchilseong.global.apiPayload.exception.GeneralException;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +26,10 @@ public class BookServiceImpl implements BookService {
 
 	private final BookRepository bookRepository;
 	private final UserRepository userRepository;
+	private final BookClubRepository bookClubRepository;
 
 	@Override
-	public BookResponseDto addBook(BookRequestDto requestDto) {
+	public BookResponseDTO addBook(BookRequestDTO requestDto) {
 		Book book = Book.builder()
 			.user(findUserByUserId(requestDto.getUserId()))
 			.title(requestDto.getTitle())
@@ -36,28 +41,29 @@ public class BookServiceImpl implements BookService {
 			.status(requestDto.getStatus()) // Enum 값 저장
 			.build();
 		bookRepository.save(book);
-		return new BookResponseDto(book);
+		return new BookResponseDTO(book);
 	}
 
 	@Override
-	public List<BookResponseDto> getAllBooks(Long userId) {
+	public List<BookResponseDTO> getAllBooks(Long userId) {
+		User user = findUserByUserId(userId);
+
 		return bookRepository.findByUserId(userId).stream()
-			.map(BookResponseDto::new)
+			.map(BookResponseDTO::new)
 			.collect(Collectors.toList());
 	}
 
 	@Override
-	public BookResponseDto getBookDetail(Long bookId) {
-		Book book = bookRepository.findById(bookId)
-			.orElseThrow(() -> new RuntimeException("해당 도서를 찾을 수 없습니다."));
-		return new BookResponseDto(book);
+	public BookResponseDTO getBookDetail(Long bookId) {
+		Book book = findBookById(bookId);
+
+		return new BookResponseDTO(book);
 	}
 
 	@Override
 	public void deleteBook(Long bookId) {
 		// Book을 ID로 조회, 없으면 예외 발생
-		Book book = bookRepository.findById(bookId)
-			.orElseThrow(() -> new RuntimeException("해당 도서를 찾을 수 없습니다."));
+		Book book = findBookById(bookId);
 
 		// isDeleted를 true로 설정하여 소프트 삭제 처리
 		book.setIsDeleted(true);
@@ -70,22 +76,37 @@ public class BookServiceImpl implements BookService {
 	@Transactional
 	public void updateBookStatus(Long bookId, String readStatus) {
 		// Book 조회
-		Book book = bookRepository.findById(bookId)
-			.orElseThrow(() -> new RuntimeException("해당 도서를 찾을 수 없습니다."));
+		Book book = findBookById(bookId);
 
 		// Enum으로 상태 업데이트
 		try {
 			ReadStatus status = ReadStatus.valueOf(readStatus.toUpperCase());
-			book.setStatus(status);
+			book.updateReadStatusStatus(status);
 			bookRepository.save(book);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException("유효하지 않은 도서 상태입니다: " + readStatus);
 		}
 	}
 
-	private User findUserByUserId(Long userId) {
-		return userRepository.findById(userId)
-			.orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다."));
+	@Override
+	public void shareBook(Long bookId, Long bookclubId) {
+		Book book = findBookById(bookId);
+
+		BookClub bookClub = bookClubRepository.findById(bookclubId)
+			.orElseThrow(() -> new GeneralException(ErrorStatus._BOOKCLUB_NOT_FOUND));
+
+		book.updateBookclub(bookClub);
+
+		bookRepository.save(book);
 	}
 
+	private User findUserByUserId(Long userId) {
+		return userRepository.findById(userId)
+			.orElseThrow(() -> new GeneralException(ErrorStatus._USER_NOT_FOUND));
+	}
+
+	private Book findBookById(Long bookId) {
+		return bookRepository.findById(bookId)
+			.orElseThrow(() -> new GeneralException(ErrorStatus._BOOK_NOT_FOUND));
+	}
 }

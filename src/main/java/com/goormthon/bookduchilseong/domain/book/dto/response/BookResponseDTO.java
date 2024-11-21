@@ -1,4 +1,4 @@
-package com.goormthon.bookduchilseong.domain.book.dto.request;
+package com.goormthon.bookduchilseong.domain.book.dto.response;
 
 import com.goormthon.bookduchilseong.domain.book.entity.Book;
 import com.goormthon.bookduchilseong.domain.book.entity.ReadStatus;
@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookResponseDto {
+public class BookResponseDTO {
 	private Long id;
 	private String title;
 	private String author;
@@ -19,7 +19,7 @@ public class BookResponseDto {
 	private Integer readPage;
 	private ReadStatus status; // Enum 추가
 
-	public BookResponseDto(Book book) {
+	public BookResponseDTO(Book book) {
 		this.id = book.getId();
 		this.title = book.getTitle();
 		this.author = book.getAuthor();

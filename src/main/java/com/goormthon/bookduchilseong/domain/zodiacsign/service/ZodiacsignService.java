@@ -11,4 +11,6 @@ public interface ZodiacsignService {
 	ZodiacsignDetailDTO getDetailZodiacsign(Long zodiacsignId);
 
 	void updateProfile(Long zodiacsignId, Long userId);
+
+	ZodiacsignDetailDTO drawZodiacsign(Long userId);
 }
