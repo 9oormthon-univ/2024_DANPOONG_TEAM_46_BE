@@ -24,20 +24,20 @@ public class CertificationServiceImpl implements CertificationService {
 	private final UserRepository userRepository;
 
 	@Override
-	public ApiResponse<String> createCertification(Long userId, Long bookId, CertificationRequestDTO requestDTO) {
+	public ApiResponse<String> createCertification(Long userId, Long bookId, CertificationRequestDTO requestDto) {
 		// Certification 엔티티 생성 및 저장
 		Certification certification = Certification.builder()
 			.book(findBookById(bookId))
-			.startPage(requestDTO.getStartPage())
-			.endPage(requestDTO.getEndPage())
-			.image(requestDTO.getImage())
-			.paragraph(requestDTO.getParagraph())
+			.startPage(requestDto.getStartPage())
+			.endPage(requestDto.getEndPage())
+			.image(requestDto.getImage())
+			.paragraph(requestDto.getParagraph())
 			.build();
 
 		certificationRepository.save(certification);
 
 		Book book = findBookById(bookId);
-		book.updateReadPage(requestDTO.getEndPage());
+		book.updateReadPage(requestDto.getEndPage());
 		bookRepository.save(book);
 
 		if (isCompleteBook(bookId)) {
