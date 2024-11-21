@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.goormthon.bookduchilseong.domain.book.dto.request.BookRequestDto;
+import com.goormthon.bookduchilseong.domain.book.dto.request.BookRequestDTO;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +22,7 @@ public interface BookApi {
 	@PostMapping
 	ApiResponse<?> addBook(
 		@Parameter(description = "추가할 도서 정보", required = true)
-		@RequestBody BookRequestDto requestDto
+		@RequestBody BookRequestDTO requestDto
 	);
 
 	@Operation(summary = "전체 도서 조회", description = "특정 사용자의 모든 도서를 조회합니다.")

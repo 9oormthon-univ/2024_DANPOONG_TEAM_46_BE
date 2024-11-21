@@ -1,7 +1,6 @@
 package com.goormthon.bookduchilseong.domain.memo.controller;
 
-import com.goormthon.bookduchilseong.domain.certification.dto.CertificationRequestDto;
-import com.goormthon.bookduchilseong.domain.memo.dto.MemoRequestDto;
+import com.goormthon.bookduchilseong.domain.memo.dto.request.MemoRequestDTO;
 import com.goormthon.bookduchilseong.domain.memo.service.MemoService;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ public class MemoController implements MemoApi{
 	//    }
 
 	@PostMapping
-	public ApiResponse<?> createMemo(@RequestBody MemoRequestDto requestDto) {
+	public ApiResponse<?> createMemo(@RequestBody MemoRequestDTO requestDto) {
 		return memoService.createMemo(requestDto);
 	}
 }

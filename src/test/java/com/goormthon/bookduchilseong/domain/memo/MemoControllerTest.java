@@ -1,13 +1,11 @@
 package com.goormthon.bookduchilseong.domain.memo;
 
-import com.goormthon.bookduchilseong.domain.certification.dto.CertificationRequestDto;
 import com.goormthon.bookduchilseong.domain.memo.controller.MemoController;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.goormthon.bookduchilseong.domain.memo.dto.MemoRequestDto;
+import com.goormthon.bookduchilseong.domain.memo.dto.request.MemoRequestDTO;
 import com.goormthon.bookduchilseong.domain.memo.service.MemoService;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,7 +33,7 @@ public class MemoControllerTest {
     @Test
     void createMemo_Success() throws Exception {
         // Given
-        MemoRequestDto requestDto = new MemoRequestDto();
+        MemoRequestDTO requestDto = new MemoRequestDTO();
         requestDto.setBookId(1L);
         requestDto.setImage("base64ImageURL");
         requestDto.setContent("오늘의 메모");
@@ -43,7 +41,7 @@ public class MemoControllerTest {
         ApiResponse<String> response = ApiResponse.onSuccess("메모 추가 성공");
 
         // Mock
-        doReturn(response).when(memoService).createMemo(any(MemoRequestDto.class));
+        doReturn(response).when(memoService).createMemo(any(MemoRequestDTO.class));
 
         // When
         mockMvc.perform(post("/api/v1/memos")
@@ -60,13 +58,13 @@ public class MemoControllerTest {
     @Test
     void createMemo_Failure() throws Exception {
         // Given: 요청 데이터 생성
-        MemoRequestDto requestDto = new MemoRequestDto();
+        MemoRequestDTO requestDto = new MemoRequestDTO();
         requestDto.setBookId(1L);
         requestDto.setImage("base64ImageURL");
         requestDto.setContent("오늘의 메모");
 
         // Mock: 서비스 레이어에서 예외 발생 설정
-        doThrow(new RuntimeException("메모 추가 실패")).when(memoService).createMemo(any(MemoRequestDto.class));
+        doThrow(new RuntimeException("메모 추가 실패")).when(memoService).createMemo(any(MemoRequestDTO.class));
 
         // When: POST 요청 수행
         mockMvc.perform(post("/api/v1/memos")

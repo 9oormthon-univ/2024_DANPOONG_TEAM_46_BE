@@ -1,4 +1,4 @@
-package com.goormthon.bookduchilseong.domain.certification.dto;
+package com.goormthon.bookduchilseong.domain.certification.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CertificationRequestDto {
+public class CertificationRequestDTO {
 	private Integer startPage;
 	private Integer endPage;
 	private String image;

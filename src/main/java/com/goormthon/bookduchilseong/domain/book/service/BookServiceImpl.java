@@ -5,8 +5,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.goormthon.bookduchilseong.domain.book.dto.request.BookRequestDto;
-import com.goormthon.bookduchilseong.domain.book.dto.request.BookResponseDto;
+import com.goormthon.bookduchilseong.domain.book.dto.request.BookRequestDTO;
+import com.goormthon.bookduchilseong.domain.book.dto.response.BookResponseDTO;
 import com.goormthon.bookduchilseong.domain.book.entity.Book;
 import com.goormthon.bookduchilseong.domain.book.entity.ReadStatus;
 import com.goormthon.bookduchilseong.domain.book.repository.BookRepository;
@@ -26,7 +26,7 @@ public class BookServiceImpl implements BookService {
 	private final UserRepository userRepository;
 
 	@Override
-	public BookResponseDto addBook(BookRequestDto requestDto) {
+	public BookResponseDTO addBook(BookRequestDTO requestDto) {
 		Book book = Book.builder()
 			.user(findUserByUserId(requestDto.getUserId()))
 			.title(requestDto.getTitle())
@@ -38,23 +38,23 @@ public class BookServiceImpl implements BookService {
 			.status(requestDto.getStatus()) // Enum 값 저장
 			.build();
 		bookRepository.save(book);
-		return new BookResponseDto(book);
+		return new BookResponseDTO(book);
 	}
 
 	@Override
-	public List<BookResponseDto> getAllBooks(Long userId) {
+	public List<BookResponseDTO> getAllBooks(Long userId) {
 		User user = findUserByUserId(userId);
 
 		return bookRepository.findByUserId(userId).stream()
-			.map(BookResponseDto::new)
+			.map(BookResponseDTO::new)
 			.collect(Collectors.toList());
 	}
 
 	@Override
-	public BookResponseDto getBookDetail(Long bookId) {
+	public BookResponseDTO getBookDetail(Long bookId) {
 		Book book = findBookById(bookId);
 
-		return new BookResponseDto(book);
+		return new BookResponseDTO(book);
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package com.goormthon.bookduchilseong.domain.certification;
 
 import com.goormthon.bookduchilseong.domain.certification.controller.CertificationController;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.goormthon.bookduchilseong.domain.certification.dto.CertificationRequestDto;
+import com.goormthon.bookduchilseong.domain.certification.dto.request.CertificationRequestDTO;
 import com.goormthon.bookduchilseong.domain.certification.service.CertificationService;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
 import org.junit.jupiter.api.Test;
@@ -32,14 +32,14 @@ public class CertificationControllerTest {
     @Test
     void createCertification_Success() throws Exception {
         // Given: 요청 데이터 설정
-        CertificationRequestDto requestDto = new CertificationRequestDto();
+        CertificationRequestDTO requestDto = new CertificationRequestDTO();
         requestDto.setStartPage(53);
         requestDto.setEndPage(78);
         requestDto.setImage("base64Url");
         requestDto.setParagraph("인상 깊은 구절");
 
         // Mock: Service의 createCertification 동작 설정
-        when(certificationService.createCertification(Mockito.eq(1L), Mockito.any(CertificationRequestDto.class)))
+        when(certificationService.createCertification(Mockito.eq(1L), Mockito.any(CertificationRequestDTO.class)))
                 .thenReturn(ApiResponse.onSuccess("도서 인증하기 성공"));
 
         // When: POST 요청 수행
@@ -57,14 +57,14 @@ public class CertificationControllerTest {
     @Test
     void createCertification_Failure_BookNotFound() throws Exception {
         // Given: 요청 데이터 설정
-        CertificationRequestDto requestDto = new CertificationRequestDto();
+        CertificationRequestDTO requestDto = new CertificationRequestDTO();
         requestDto.setStartPage(53);
         requestDto.setEndPage(78);
         requestDto.setImage("base64Url");
         requestDto.setParagraph("인상 깊은 구절");
 
         // Mock: Service에서 RuntimeException 발생 설정
-        when(certificationService.createCertification(Mockito.eq(999L), Mockito.any(CertificationRequestDto.class)))
+        when(certificationService.createCertification(Mockito.eq(999L), Mockito.any(CertificationRequestDTO.class)))
                 .thenThrow(new RuntimeException("해당 도서를 찾을 수 없습니다."));
 
         // When: POST 요청 수행

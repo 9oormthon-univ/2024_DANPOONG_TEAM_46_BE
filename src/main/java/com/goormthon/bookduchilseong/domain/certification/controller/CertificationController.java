@@ -1,6 +1,6 @@
 package com.goormthon.bookduchilseong.domain.certification.controller;
 
-import com.goormthon.bookduchilseong.domain.certification.dto.CertificationRequestDto;
+import com.goormthon.bookduchilseong.domain.certification.dto.request.CertificationRequestDTO;
 import com.goormthon.bookduchilseong.domain.certification.service.CertificationService;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class CertificationController implements CertificationApi {
 	@PostMapping
 	public ApiResponse<?> createCertification(
 		@PathVariable Long bookId,
-		@RequestBody CertificationRequestDto requestDto) {
+		@RequestBody CertificationRequestDTO requestDto) {
 		return certificationService.createCertification(bookId, requestDto);
 	}
 }

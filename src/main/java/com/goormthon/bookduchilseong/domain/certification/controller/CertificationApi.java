@@ -1,6 +1,6 @@
 package com.goormthon.bookduchilseong.domain.certification.controller;
 
-import com.goormthon.bookduchilseong.domain.certification.dto.CertificationRequestDto;
+import com.goormthon.bookduchilseong.domain.certification.dto.request.CertificationRequestDTO;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +20,6 @@ public interface CertificationApi {
 		@Parameter(description = "도서 ID", required = true, example = "1")
 		@PathVariable Long bookId,
 		@Parameter(description = "도서 인증 요청 데이터", required = true)
-		@RequestBody CertificationRequestDto requestDto
+		@RequestBody CertificationRequestDTO requestDto
 	);
 }

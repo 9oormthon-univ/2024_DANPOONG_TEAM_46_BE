@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.goormthon.bookduchilseong.domain.book.entity.Book;
 import com.goormthon.bookduchilseong.domain.book.repository.BookRepository;
-import com.goormthon.bookduchilseong.domain.memo.dto.MemoRequestDto;
+import com.goormthon.bookduchilseong.domain.memo.dto.request.MemoRequestDTO;
 import com.goormthon.bookduchilseong.domain.memo.entity.Memo;
 import com.goormthon.bookduchilseong.domain.memo.repository.MemoRepository;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
@@ -21,7 +21,7 @@ public class MemoServiceImpl implements MemoService {
 	private final BookRepository bookRepository;
 
 	@Override
-	public ApiResponse<?> createMemo(MemoRequestDto requestDto) {
+	public ApiResponse<?> createMemo(MemoRequestDTO requestDto) {
 		// Certification 엔티티 생성 및 저장
 		Memo memo = Memo.builder()
 			.book(findBookById(requestDto.getBookId()))

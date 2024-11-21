@@ -1,6 +1,6 @@
 package com.goormthon.bookduchilseong.domain.memo.controller;
 
-import com.goormthon.bookduchilseong.domain.memo.dto.MemoRequestDto;
+import com.goormthon.bookduchilseong.domain.memo.dto.request.MemoRequestDTO;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +18,6 @@ public interface MemoApi {
 	@PostMapping
 	ApiResponse<?> createMemo(
 		@Parameter(description = "메모 생성 요청 데이터", required = true)
-		@RequestBody MemoRequestDto requestDto
+		@RequestBody MemoRequestDTO requestDto
 	);
 }

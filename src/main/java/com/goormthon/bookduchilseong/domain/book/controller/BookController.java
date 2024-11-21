@@ -1,8 +1,7 @@
 package com.goormthon.bookduchilseong.domain.book.controller;
 
-import com.goormthon.bookduchilseong.domain.book.dto.request.BookRequestDto;
-import com.goormthon.bookduchilseong.domain.book.dto.request.BookResponseDto;
-import com.goormthon.bookduchilseong.domain.book.entity.ReadStatus;
+import com.goormthon.bookduchilseong.domain.book.dto.request.BookRequestDTO;
+import com.goormthon.bookduchilseong.domain.book.dto.response.BookResponseDTO;
 import com.goormthon.bookduchilseong.domain.book.service.BookService;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,20 +20,20 @@ public class BookController implements BookApi {
 	private final BookService bookService;
 
 	@PostMapping
-	public ApiResponse<?> addBook(@RequestBody BookRequestDto requestDto) {
-		BookResponseDto responseDto = bookService.addBook(requestDto);
+	public ApiResponse<?> addBook(@RequestBody BookRequestDTO requestDto) {
+		BookResponseDTO responseDto = bookService.addBook(requestDto);
 		return ApiResponse.onSuccess(responseDto);
 	}
 
 	@GetMapping
 	public ApiResponse<?> getAllBooks(@RequestParam Long userId) {
-		List<BookResponseDto> books = bookService.getAllBooks(userId);
+		List<BookResponseDTO> books = bookService.getAllBooks(userId);
 		return ApiResponse.onSuccess(books);
 	}
 
 	@GetMapping("/{bookId}")
 	public ApiResponse<?> getBookDetail(@PathVariable Long bookId) {
-		BookResponseDto bookDetail = bookService.getBookDetail(bookId);
+		BookResponseDTO bookDetail = bookService.getBookDetail(bookId);
 		return ApiResponse.onSuccess(bookDetail);
 	}
 
