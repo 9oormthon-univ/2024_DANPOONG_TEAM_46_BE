@@ -41,7 +41,6 @@ public class OAuthController {
             description = "카카오 인증 서버가 리다이렉트한 사용자 요청을 처리합니다. 요청에 포함된 인증 코드를 이용해 로그인 또는 회원가입을 수행하고, 결과를 반환합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "로그인 또는 회원가입 성공 시 사용자 정보 반환"),
-                    @ApiResponse(responseCode = "400", description = "잘못된 요청 또는 인증 실패")
             }
     )
     @GetMapping("/kakao/callback")
