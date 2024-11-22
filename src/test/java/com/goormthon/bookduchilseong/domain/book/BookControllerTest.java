@@ -40,15 +40,15 @@ class BookControllerTest {
         requestDto.setUserId(1L);
         requestDto.setTitle("채식주의자");
         requestDto.setAuthor("한강");
-        requestDto.setTotalPage(200L);
-        requestDto.setGoalDayPage(20L);
+        requestDto.setTotalPage(200);
+        requestDto.setGoalDayPage(20);
 
         // Mock 응답 데이터
         BookResponseDto responseDto = new BookResponseDto();
         responseDto.setTitle("채식주의자");
         responseDto.setAuthor("한강");
         responseDto.setProgress(0);
-        responseDto.setReadPage(0L);
+        responseDto.setReadPage(0);
         responseDto.setStatus(ReadStatus.NOT_STARTED);
 
         // Mock 동작 정의
@@ -74,14 +74,14 @@ class BookControllerTest {
         book1.setTitle("채식주의자");
         book1.setAuthor("한강");
         book1.setProgress(50);
-        book1.setReadPage(100L);
+        book1.setReadPage(100);
         book1.setStatus(ReadStatus.IN_PROGRESS);
 
         BookResponseDto book2 = new BookResponseDto();
         book2.setTitle("데미안");
         book2.setAuthor("헤르만 헤세");
         book2.setProgress(100);
-        book2.setReadPage(200L);
+        book2.setReadPage(200);
         book2.setStatus(ReadStatus.COMPLETED);
 
         List<BookResponseDto> mockBooks = List.of(book1, book2);
@@ -108,7 +108,7 @@ class BookControllerTest {
         bookDetail.setTitle("채식주의자");
         bookDetail.setAuthor("한강");
         bookDetail.setProgress(50);
-        bookDetail.setReadPage(100L);
+        bookDetail.setReadPage(100);
         bookDetail.setStatus(ReadStatus.IN_PROGRESS);
 
         // Mock 동작 정의
