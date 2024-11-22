@@ -6,7 +6,6 @@ import com.goormthon.bookduchilseong.global.auth.dto.response.KakaoUserResponseD
 import com.goormthon.bookduchilseong.global.auth.repository.AuthRepository;
 import com.goormthon.bookduchilseong.global.auth.service.KakaoService;
 import com.goormthon.bookduchilseong.global.oauth.dto.kakao.KakaoTokenResponse;
-import com.goormthon.bookduchilseong.global.oauth.dto.kakao.KakaoUserInfo;
 import com.goormthon.bookduchilseong.global.oauth.dto.response.KakaoLoginResponseDto;
 import com.goormthon.bookduchilseong.global.oauth.service.OAuthService;
 import com.goormthon.bookduchilseong.global.security.jwt.JwtTokenProvider;
