@@ -23,13 +23,17 @@ public class User extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long id; // 유저 ID
+
 
 	@Column(name = "name", nullable = false)
-	private String name;
+	private String name; // 유저 이름
 
 	@Column(name = "draw", nullable = false)
-	private int draw;
+	private String draw; // 뽑기
+
+	@Column(name = "kakaothumbnail", nullable = true)
+	private String kakaothumbnail;
 
 	@Column(name = "profile", nullable = true)
 	private String profile;
