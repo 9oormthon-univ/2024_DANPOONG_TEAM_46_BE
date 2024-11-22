@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class KakaoUserResponseDto {
     private long id;
     private String nickname;
-    private String profileImage;
+    private String thumbnailImageUrl;
 }
