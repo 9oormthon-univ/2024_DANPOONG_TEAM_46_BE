@@ -1,9 +1,15 @@
 package com.goormthon.bookduchilseong.global.oauth.service;
 
+import com.goormthon.bookduchilseong.domain.user.entity.User;
+import com.goormthon.bookduchilseong.domain.user.service.UserService;
+import com.goormthon.bookduchilseong.global.auth.dto.response.KakaoUserResponseDto;
+import com.goormthon.bookduchilseong.global.auth.repository.AuthRepository;
+import com.goormthon.bookduchilseong.global.auth.service.KakaoService;
 import com.goormthon.bookduchilseong.global.oauth.dto.kakao.KakaoTokenResponse;
 import com.goormthon.bookduchilseong.global.oauth.dto.kakao.KakaoUserInfo;
 import com.goormthon.bookduchilseong.global.oauth.dto.response.KakaoLoginResponseDto;
 import com.goormthon.bookduchilseong.global.oauth.service.OAuthService;
+import com.goormthon.bookduchilseong.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,8 +43,11 @@ public class OAuthServiceImpl implements OAuthService {
     @Value("${spring.security.oauth2.client.registration.kakao.client-secret:}") // Optional
     private String kakaoClientSecret;
 
+    private final UserService userService;
+    private final KakaoService kakaoService;
     private final WebClient webClient;
-
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthRepository authRepository;
     @Override
     public String getKakaoAuthorizationUrl() {
         log.info(kakaoRedirectUri);
@@ -53,28 +62,37 @@ public class OAuthServiceImpl implements OAuthService {
     @Override
     public KakaoLoginResponseDto processKakaoCallback(String code) {
         // 1. 인증 코드로 액세스 토큰 요청
-        // String kakaoAccessToken = getAccessToken(code);
         KakaoTokenResponse tokenResponse = getAccessTokenResponse(code);
+        // 액세스 토큰과 리프레시 토큰 로그 확인
+        log.info("Kakao Access Token : {}", tokenResponse.accessToken());
+        log.info("Kakao Refresh Token : {}", tokenResponse.refreshToken());
 
-        // 2. 액세스 토큰과 리프레시 토큰 로그 확인
-        log.info("Access Token: {}", tokenResponse.accessToken());
-        log.info("Refresh Token: {}", tokenResponse.refreshToken());
+        // 2. 카카오 사용자 정보 가져오기
+        KakaoUserResponseDto kakaoUser = kakaoService.getKakaoUser(tokenResponse.accessToken());
+        log.info("Profile Nickname : {}", kakaoUser.properties().nickname());
+        log.info("Profile Thumbnail uri : {}", kakaoUser.properties().thumbnailImage());
 
-        // 실제 로직 추가 (사용자 정보 처리)
-        // TODO: 사용자 정보를 기반으로 로그인 또는 회원가입 로직 처리
-        log.info("Received access token: {}", tokenResponse);
+        // 3. 사용자 조회 또는 생성
+        User user = userService.findOrCreateUser(kakaoUser);
+
+        // 4. JWT 발급
+        String jwtAccessToken = jwtTokenProvider.createAccessToken(user.getId());
+        String jwtRefreshToken = jwtTokenProvider.createRefreshToken(user.getId());
+        log.info("Jwt Access Token : {}", jwtAccessToken);
+        log.info("Jwt Access Token : {}", jwtRefreshToken);
+
+        // 5. Refresh Token 저장
+        // authRepository.saveRefreshToken(user.getId(),jwtRefreshToken,jwtTokenProvider.getRefreshTokenValidity());
 
         return KakaoLoginResponseDto.builder()
                 .accountId(1L) // Mock 데이터
-                .accessToken(tokenResponse.accessToken()) // 실제 액세스 토큰
-                .refreshToken(tokenResponse.refreshToken()) // 실제 리프레시 토큰
-//                .accessToken(kakaoAccessToken)
-//                .refreshToken("mock-refresh-token")
+                .accessToken(jwtAccessToken) // 반환해주는 jwtAccessToken
+                .refreshToken(jwtRefreshToken) // 반환해주는 jwtRefreshToken
                 .isNewUser(false)
                 .build();
     }
 
-    private String getAccessToken(String code) {
+    private KakaoTokenResponse getAccessTokenResponse(String code) {
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("grant_type", "authorization_code");
         formData.add("client_id", kakaoClientId);
@@ -91,34 +109,13 @@ public class OAuthServiceImpl implements OAuthService {
                 .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
                 .body(BodyInserters.fromFormData(formData))
                 .retrieve()
-                .bodyToMono(KakaoTokenResponse.class) // TODO 실제 구현에서는 DTO로 변환 필요
+                .bodyToMono(KakaoTokenResponse.class) // DTO로 응답 처리
                 .block(); // 동기 처리
 
-        if (response == null || response.accessToken() == null) {
+        if (response == null) {
             throw new IllegalStateException("Failed to retrieve access token from Kakao");
         }
 
-        return response.accessToken();
-    }
-
-    private KakaoTokenResponse getAccessTokenResponse(String code) {
-        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-        formData.add("grant_type", "authorization_code");
-        formData.add("client_id", kakaoClientId);
-        formData.add("redirect_uri", kakaoRedirectUri);
-        formData.add("code", code);
-
-        // Optional: client_secret 추가 (필요한 경우)
-        if (kakaoClientSecret != null && !kakaoClientSecret.isBlank()) {
-            formData.add("client_secret", kakaoClientSecret);
-        }
-
-        return webClient.post()
-                .uri(kakaoTokenUri)
-                .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
-                .body(BodyInserters.fromFormData(formData))
-                .retrieve()
-                .bodyToMono(KakaoTokenResponse.class) // DTO로 응답 처리
-                .block(); // 동기 처리
+        return response;
     }
 }
