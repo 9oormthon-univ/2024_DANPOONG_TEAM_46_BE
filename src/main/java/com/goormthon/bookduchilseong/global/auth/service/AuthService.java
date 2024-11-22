@@ -7,4 +7,5 @@ public interface AuthService {
     // 로그인 처리
     AccountLoginResponseDto login(String accessToken);
     TokenRefreshResponseDto refreshToken(String refreshToken);
+    void logout(Long userId);
 }

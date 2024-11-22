@@ -49,6 +49,11 @@ public class AuthServiceImpl implements AuthService{
                 .build();
     }
 
+    @Override
+    public void logout(Long userId) {
+        authRepository.deleteRefreshToken(userId);
+    }
+
     // 일반 유저 로그인
     public AccountLoginResponseDto login(String accessToken) {
         log.info("일반 유저 로그인");
@@ -58,4 +63,6 @@ public class AuthServiceImpl implements AuthService{
                 .refreshToken("fakeRefreshToken") // 가짜 Refresh Token
                 .build();
     }
+
+
 }
