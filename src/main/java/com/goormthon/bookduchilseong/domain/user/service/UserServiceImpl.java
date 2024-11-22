@@ -9,10 +9,13 @@ import com.goormthon.bookduchilseong.domain.user.entity.User;
 import com.goormthon.bookduchilseong.domain.user.repository.UserRepository;
 import com.goormthon.bookduchilseong.domain.zodiacsign.entity.Zodiacsign;
 import com.goormthon.bookduchilseong.domain.zodiacsign.repository.ZodiacsignRepository;
+import com.goormthon.bookduchilseong.global.auth.dto.response.KakaoUserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static org.aspectj.bridge.MessageUtil.print;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +25,39 @@ public class UserServiceImpl implements UserService {
     private final BookRepository bookRepository;
     private final ZodiacsignRepository zodiacsignRepository;
     private final BookClubRepository bookClubRepository;
+
+    @Override
+    public User findOrCreateUser(KakaoUserResponseDto kakaoUser) {
+
+        // 1. 닉네임 확인
+        if(kakaoUser.properties().nickname() == null || kakaoUser.properties().nickname().isEmpty()){
+            throw new IllegalArgumentException("카카오 닉네임을 가져올 수 없습니다. : " + kakaoUser.properties().nickname());
+        }
+
+        User newUser0 = new User(
+                1234124125125112L, // ID는 자동 생성
+                kakaoUser.properties().nickname(),
+                "0", // 새로운 유저의 경우 뽑기 횟수 => 0
+                kakaoUser.properties().thumbnailImage(), // 카카오 프로필 이미지
+                null, // 프로필 별자리 이름 (별자리)
+                null // 프로필 별자리 uri (별자리)
+        );
+
+        return newUser0;
+        // 2. 기존 사용자 조회
+//        return userRepository.findByName(kakaoUser.getNickname()).orElseGet(() -> {
+//                    // 3. 새 사용자 저장
+//                    User newUser = new User(
+//                            null, // ID는 자동 생성
+//                            kakaoUser.getNickname(),
+//                            "0", // 새로운 유저의 경우 뽑기 횟수 => 0
+//                            kakaoUser.getThumbnailImageUrl(), // 카카오 프로필 이미지
+//                            null, // 프로필 별자리 이름 (별자리)
+//                            null // 프로필 별자리 uri (별자리)
+//                    );
+//                    return userRepository.save(newUser);
+//                });
+    }
 
     @Override
     public UserMyPageReseponseDto getUserMypage(Long userId) {
