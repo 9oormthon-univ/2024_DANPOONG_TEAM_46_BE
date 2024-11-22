@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user")
+@Table(name = "user_table")
 public class User extends BaseEntity {
 
 	@Id
@@ -35,11 +35,14 @@ public class User extends BaseEntity {
 	@Column(name = "draw", nullable = false)
 	private String draw; // 뽑기
 
+	@Column(name = "kakaothumbnail", nullable = true)
+	private String kakaothumbnail;
+
 	@Column(name = "profile", nullable = true)
-	private String profile; //프로필 별자리 이름(nullable)
+	private String profile; // 프로필 사진 uri(nullable)
 
 	@Column(name = "zodiacsigns", nullable = true)
-	private String zodiacsigns; // 프로필(nullable)
+	private String zodiacsigns; // 프로필 별자리 이름(nullable)
 
 
 	public void updateProfile(Zodiacsign zodiacsign) {
