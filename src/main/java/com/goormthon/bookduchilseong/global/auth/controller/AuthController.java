@@ -32,8 +32,7 @@ public class AuthController {
     // 일반 유저 로그인
     @PostMapping("/login")
     public ResponseEntity<AccountLoginResponseDto> login(
-            @RequestHeader("Authorization") String accessToken,
-            @RequestParam("draw") String draw){
+            @RequestHeader("Authorization") String accessToken){
         String token = accessToken.replace("Bearer ", "");
         AccountLoginResponseDto response = authService.login(token);
         return ResponseEntity.ok(response);
