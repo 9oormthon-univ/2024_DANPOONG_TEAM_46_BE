@@ -14,24 +14,24 @@ public class SwaggerConfig {
 	@Bean
 	public OpenAPI openAPI() {
 		return new OpenAPI()
-				.openapi("3.0.0")
-				.components(new Components().addSecuritySchemes("bearerAuth", createBearerAuth()))
-				.info(apiInfo())
-				.addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
+			.openapi("3.0.0")
+			.components(new Components().addSecuritySchemes("bearerAuth", createBearerAuth()))
+			.info(apiInfo())
+			.addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
 	}
 
 	private SecurityScheme createBearerAuth() {
 		return new SecurityScheme()
-				.name("Authorization")
-				.type(SecurityScheme.Type.HTTP)
-				.scheme("bearer")
-				.bearerFormat("JWT");
+			.name("Authorization")
+			.type(SecurityScheme.Type.HTTP)
+			.scheme("bearer")
+			.bearerFormat("JWT");
 	}
 
 	private Info apiInfo() {
 		return new Info()
-				.title("북두칠성 API")
-				.description("북두칠성 API 설명")
-				.version("1.0.0");
+			.title("북두칠성 API")
+			.description("북두칠성 API 설명")
+			.version("1.0.0");
 	}
 }

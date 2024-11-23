@@ -18,7 +18,10 @@ public enum ErrorStatus implements BaseErrorCode {
 	_BOOKCLUB_NOT_FOUND(HttpStatus.BAD_REQUEST, "BOOKCLUB4001", "해당 북클럽이 없습니다."),
 	_BOOK_NOT_FOUND(HttpStatus.BAD_REQUEST, "BOOK4001", "해당 책이 없습니다."),
 	_ZODIACSIGN_NOT_FOUND(HttpStatus.BAD_REQUEST, "ZODIACSIGN4001", "해당 별자리가 없습니다."),
-	_DRAW_COUNT_ZERO(HttpStatus.BAD_REQUEST, "DRAW4001", "남은 별자리 뽑기 횟수가 없습니다.");
+	_DRAW_COUNT_ZERO(HttpStatus.BAD_REQUEST, "DRAW4001", "남은 별자리 뽑기 횟수가 없습니다."),
+	_CERTIFICATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "CERTIFICATION4001", "해당 인증이 없습니다."),
+	_IMAGE_TEXT_NOT_CREATE(HttpStatus.BAD_REQUEST, "IMAGE4001", "이미지 텍스트를 생성할 수 없습니다."),
+	_SUMMATION_NOT_CREATE(HttpStatus.BAD_REQUEST, "SUMMATION4001", "요약을 생성할 수 없습니다.");
 
 
 	private HttpStatus httpStatus;

@@ -45,4 +45,11 @@ public class Certification extends BaseEntity {
 
 	@Column(name = "paragraph", nullable = false, columnDefinition = "TEXT")
 	private String paragraph; // 인상 깊은 구절
+
+	@Column(name = "summation", nullable = true)
+	private String summation; // 요약
+
+	public void createSummation(String summation) {
+		this.summation = summation;
+	}
 }
