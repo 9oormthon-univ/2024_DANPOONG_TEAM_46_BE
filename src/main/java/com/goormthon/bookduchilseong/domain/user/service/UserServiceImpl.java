@@ -34,29 +34,29 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("카카오 닉네임을 가져올 수 없습니다. : " + kakaoUser.properties().nickname());
         }
 
-        User newUser0 = new User(
-                1234124125125112L, // ID는 자동 생성
-                kakaoUser.properties().nickname(),
-                "0", // 새로운 유저의 경우 뽑기 횟수 => 0
-                kakaoUser.properties().thumbnailImage(), // 카카오 프로필 이미지
-                null, // 프로필 별자리 이름 (별자리)
-                null // 프로필 별자리 uri (별자리)
-        );
-
-        return newUser0;
+//        User newUser0 = new User(
+//                kakaoUser.id(), // ID는 자동 생성
+//                kakaoUser.properties().nickname(),
+//                "0", // 새로운 유저의 경우 뽑기 횟수 => 0
+//                kakaoUser.properties().thumbnailImage(), // 카카오 프로필 이미지
+//                null, // 프로필 별자리 이름 (별자리)
+//                null // 프로필 별자리 uri (별자리)
+//        );
+//
+//        return newUser0;
         // 2. 기존 사용자 조회
-//        return userRepository.findByName(kakaoUser.getNickname()).orElseGet(() -> {
-//                    // 3. 새 사용자 저장
-//                    User newUser = new User(
-//                            null, // ID는 자동 생성
-//                            kakaoUser.getNickname(),
-//                            "0", // 새로운 유저의 경우 뽑기 횟수 => 0
-//                            kakaoUser.getThumbnailImageUrl(), // 카카오 프로필 이미지
-//                            null, // 프로필 별자리 이름 (별자리)
-//                            null // 프로필 별자리 uri (별자리)
-//                    );
-//                    return userRepository.save(newUser);
-//                });
+        return userRepository.findByName(kakaoUser.properties().nickname()).orElseGet(() -> {
+                    // 3. 새 사용자 저장
+                    User newUser = new User(
+                            kakaoUser.id(), // ID는 자동 생성
+                            kakaoUser.properties().nickname(),
+                            "0", // 새로운 유저의 경우 뽑기 횟수 => 0
+                            kakaoUser.properties().thumbnailImage(), // 카카오 프로필 이미지
+                            null, // 프로필 별자리 이름 (별자리)
+                            null // 프로필 별자리 uri (별자리)
+                    );
+                    return userRepository.save(newUser);
+                });
     }
 
     @Override
