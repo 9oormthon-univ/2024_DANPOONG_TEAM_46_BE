@@ -1,27 +1,15 @@
 package com.goormthon.bookduchilseong.global.security.jwt;
 
-//import com.goormthon.bookduchilseong.domain.account.entity.Account;
-import com.goormthon.bookduchilseong.domain.user.entity.User;
-import com.goormthon.bookduchilseong.global.security.CustomUserDetails;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Component
