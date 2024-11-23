@@ -3,12 +3,15 @@ package com.goormthon.bookduchilseong.domain.user.controller;
 import com.goormthon.bookduchilseong.domain.user.dto.response.UserMyPageReseponseDto;
 import com.goormthon.bookduchilseong.domain.user.service.UserService;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
+import com.goormthon.bookduchilseong.global.security.jwt.JwtTokenProvider;
+import io.jsonwebtoken.Jwt;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
@@ -17,15 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("api/v1/users")
 public class UserController {
     private final UserService userService; // UserService 인터페이스 의존
-
+    private final JwtTokenProvider jwtTokenProvider;
     @Operation(
             summary = "마이페이지 화면",
             description = "(별자리, 읽은 책, 가입북클럽) 수, 내 책 목록 반환"
     )
-    @GetMapping("/{userId}/mypage")
-    public ApiResponse<?> getUserMyPage(
-            @PathVariable long userId){
+    @GetMapping("/mypage")
+    public ApiResponse<?> getUserMyPage(@RequestHeader(name = "Authorization") String token){
         try{
+            Long userId = jwtTokenProvider.getUserIdFromToken(token);
             UserMyPageReseponseDto response = userService.getUserMypage(userId);
             return ApiResponse.onSuccess(response);
         }catch(Exception e){
