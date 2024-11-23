@@ -6,11 +6,11 @@ import com.goormthon.bookduchilseong.domain.zodiacsign.dto.response.ZodiacsignDe
 import com.goormthon.bookduchilseong.domain.zodiacsign.dto.response.ZodiacsignResponseDTO;
 
 public interface ZodiacsignService {
-	List<ZodiacsignResponseDTO> getMyZodiacsigns(Long userId);
+	List<ZodiacsignResponseDTO> getMyZodiacsigns(String token);
 
 	ZodiacsignDetailDTO getDetailZodiacsign(Long zodiacsignId);
 
-	void updateProfile(Long zodiacsignId, Long userId);
+	void updateProfile(Long zodiacsignId, String token);
 
-	ZodiacsignDetailDTO drawZodiacsign(Long userId);
+	ZodiacsignDetailDTO drawZodiacsign(String token);
 }

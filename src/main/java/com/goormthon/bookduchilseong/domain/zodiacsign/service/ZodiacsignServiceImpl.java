@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import com.goormthon.bookduchilseong.global.security.jwt.JwtTokenProvider;
 import org.springframework.stereotype.Service;
 
 import com.goormthon.bookduchilseong.domain.user.entity.User;
@@ -25,9 +26,10 @@ public class ZodiacsignServiceImpl implements ZodiacsignService {
 
 	private final UserRepository userRepository;
 	private final ZodiacsignRepository zodiacsignRepository;
-
+	private final JwtTokenProvider jwtTokenProvider;
 	@Override
-	public List<ZodiacsignResponseDTO> getMyZodiacsigns(Long userId) {
+	public List<ZodiacsignResponseDTO> getMyZodiacsigns(String token) {
+		Long userId = jwtTokenProvider.getUserIdFromToken(token);
 		List<Zodiacsign> zodiacsign = zodiacsignRepository.findByUser(findUserById(userId));
 
 		return zodiacsign.stream()
@@ -45,7 +47,8 @@ public class ZodiacsignServiceImpl implements ZodiacsignService {
 	}
 
 	@Override
-	public void updateProfile(Long zodiacsignId, Long userId) {
+	public void updateProfile(Long zodiacsignId, String token) {
+		Long userId = jwtTokenProvider.getUserIdFromToken(token);
 		User user = findUserById(userId);
 
 		Zodiacsign zodiacsign = findZodiacsignById(zodiacsignId);
@@ -55,7 +58,8 @@ public class ZodiacsignServiceImpl implements ZodiacsignService {
 	}
 
 	@Override
-	public ZodiacsignDetailDTO drawZodiacsign(Long userId) {
+	public ZodiacsignDetailDTO drawZodiacsign(String token) {
+		Long userId = jwtTokenProvider.getUserIdFromToken(token);
 		User user = findUserById(userId);
 		List<Zodiacsign> zodiacsigns = zodiacsignRepository.findByUserAndStatusFalse(user);
 
