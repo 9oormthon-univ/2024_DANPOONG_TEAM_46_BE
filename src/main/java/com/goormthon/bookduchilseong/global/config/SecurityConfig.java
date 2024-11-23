@@ -88,7 +88,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOriginPatterns(List.of("https://your-frontend-domain.com")); // TODO: 프론트엔드 도메인으로 변경
+        corsConfiguration.setAllowedOriginPatterns(List.of("*")); //
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.setAllowedMethods(
