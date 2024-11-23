@@ -78,7 +78,7 @@ public class OAuthServiceImpl implements OAuthService {
         String jwtAccessToken = jwtTokenProvider.createAccessToken(user.getId());
         String jwtRefreshToken = jwtTokenProvider.createRefreshToken(user.getId());
         log.info("Jwt Access Token : {}", jwtAccessToken);
-        log.info("Jwt Access Token : {}", jwtRefreshToken);
+        log.info("Jwt Refresh Token : {}", jwtRefreshToken);
 
         // 5. Refresh Token 저장
         authRepository.saveRefreshToken(

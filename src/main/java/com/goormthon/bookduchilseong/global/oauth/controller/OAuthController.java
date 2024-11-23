@@ -50,10 +50,12 @@ public class OAuthController {
     @GetMapping("/kakao/callback")
     public ResponseEntity<Void> kakaoCallback(@RequestParam("code") String code) {
         KakaoLoginResponseDto response = oAuthService.processKakaoCallback(code);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Set-Cookie", "userId=" + response + "; Path=/; HttpOnly");
 
-        String redirectUrl = "http://api.book7stars.site:3000";  // 메인 페이지 URL로 변경
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Set-Cookie", "accessToken=" + response.accessToken()+ "; Path=/; HttpOnly; Secure; SameSite=Strict");
+        headers.add("Set-Cookie", "refreshToken=" + response.refreshToken() + "; Path=/; HttpOnly; Secure; SameSite=Strict");
+
+        String redirectUrl = "http://localhost::3000";  // 메인 페이지 URL로 변경
 
         return ResponseEntity.status(301)
             .location(URI.create(redirectUrl))  // 리다이렉트할 URL 설정
