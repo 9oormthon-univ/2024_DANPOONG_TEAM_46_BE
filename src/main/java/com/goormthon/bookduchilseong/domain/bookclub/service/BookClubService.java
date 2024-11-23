@@ -30,4 +30,5 @@ public interface BookClubService {
 	List<BookClubJoinedDTO> getJoinedBookClubs(String token);
 
 	List<BookClubJoinDTO> getjoinBookClubs(String token);
+
 }

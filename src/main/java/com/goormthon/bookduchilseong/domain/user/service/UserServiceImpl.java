@@ -13,6 +13,7 @@ import com.goormthon.bookduchilseong.domain.user.dto.response.UserMyPageResepons
 import com.goormthon.bookduchilseong.domain.user.entity.User;
 import com.goormthon.bookduchilseong.domain.user.repository.UserRepository;
 import com.goormthon.bookduchilseong.domain.zodiacsign.entity.Zodiacsign;
+import com.goormthon.bookduchilseong.domain.zodiacsign.entity.Zodiacsigns;
 import com.goormthon.bookduchilseong.domain.zodiacsign.repository.ZodiacsignRepository;
 import com.goormthon.bookduchilseong.global.apiPayload.code.status.ErrorStatus;
 import com.goormthon.bookduchilseong.global.apiPayload.exception.GeneralException;
@@ -58,7 +59,19 @@ public class UserServiceImpl implements UserService {
 				null, // 프로필 별자리 이름 (별자리)
 				null // 프로필 별자리 uri (별자리)
 			);
-			return userRepository.save(newUser);
+			newUser = userRepository.save(newUser);
+
+			// 3. Zodiacsign 정보 저장
+			for (Zodiacsigns zodiac : Zodiacsigns.values()) {
+				Zodiacsign zodiacsign = Zodiacsign.builder()
+					.zodiacsigns(zodiac)
+					.status(false) // 초기 상태는 비활성화
+					.zodiacsignImg(zodiac.getImagePath()) // 이미지 경로 설정
+					.user(newUser)
+					.build();
+				zodiacsignRepository.save(zodiacsign);
+			}
+			return newUser;
 		});
 	}
 

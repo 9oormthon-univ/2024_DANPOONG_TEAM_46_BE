@@ -2,6 +2,9 @@ package com.goormthon.bookduchilseong.global.oauth.service;
 
 import com.goormthon.bookduchilseong.domain.user.entity.User;
 import com.goormthon.bookduchilseong.domain.user.service.UserService;
+import com.goormthon.bookduchilseong.domain.zodiacsign.entity.Zodiacsign;
+import com.goormthon.bookduchilseong.domain.zodiacsign.entity.Zodiacsigns;
+import com.goormthon.bookduchilseong.domain.zodiacsign.repository.ZodiacsignRepository;
 import com.goormthon.bookduchilseong.global.auth.dto.response.KakaoUserResponseDto;
 import com.goormthon.bookduchilseong.global.auth.repository.AuthRepository;
 import com.goormthon.bookduchilseong.global.auth.service.KakaoService;
@@ -47,6 +50,7 @@ public class OAuthServiceImpl implements OAuthService {
     private final WebClient webClient;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthRepository authRepository;
+    private final ZodiacsignRepository zodiacsignRepository;
     @Override
     public String getKakaoAuthorizationUrl() {
         log.info(kakaoRedirectUri);
@@ -74,6 +78,16 @@ public class OAuthServiceImpl implements OAuthService {
         // 3. 사용자 조회 또는 생성
         User user = userService.findOrCreateUser(kakaoUser);
 
+//        // 3. Zodiacsign 정보 저장
+//        for (Zodiacsigns zodiac : Zodiacsigns.values()) {
+//            Zodiacsign zodiacsign = Zodiacsign.builder()
+//                    .zodiacsigns(zodiac)
+//                    .status(false) // 초기 상태는 비활성화
+//                    .zodiacsignImg(zodiac.getImagePath()) // 이미지 경로 설정
+//                    .user(user)
+//                    .build();
+//            zodiacsignRepository.save(zodiacsign);
+//        }
         // 4. JWT 발급
         String jwtAccessToken = jwtTokenProvider.createAccessToken(user.getId());
         String jwtRefreshToken = jwtTokenProvider.createRefreshToken(user.getId());
