@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-    @Value("${jwt.secret}")
+    @Value("${spring.jwt.secret}")
     private String secretKey;
 
     private final long ACCESS_TOKEN_VALIDITY = 30 * 60 * 1000L; // 30분
@@ -39,7 +39,8 @@ public class JwtTokenProvider {
             Jwts.parserBuilder()
                     .setSigningKey(secretKey.getBytes())
                     .build()
-                    .parseClaimsJws(token);
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (Exception e) {
             throw new RuntimeException("Invalid token", e);
         }
@@ -62,12 +63,13 @@ public class JwtTokenProvider {
 
     public String createAccessToken(Long userId) {
         Claims claims = Jwts.claims().setSubject(userId.toString());
-        claims.put("userid", userId);
+        claims.put("userId", userId); // role 없이 userId만 추가
         return buildToken(claims, ACCESS_TOKEN_VALIDITY);
     }
 
     public String createRefreshToken(Long userId) {
         Claims claims = Jwts.claims().setSubject(userId.toString());
+        claims.put("userId", userId); // userId만 추가 (role 불필요)
         return buildToken(claims, REFRESH_TOKEN_VALIDITY);
     }
 
@@ -97,12 +99,11 @@ public class JwtTokenProvider {
     // 클레임에서 Authentication 객체 생성
     public Authentication getAuthenticationFromClaims(Claims claims) {
         Long userId = claims.get("userId", Long.class);
-        String role = claims.get("role", String.class);
 
         return new UsernamePasswordAuthenticationToken(
                 userId,
                 null,
-                Collections.singletonList(new SimpleGrantedAuthority(role))
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
         );
     }
 }

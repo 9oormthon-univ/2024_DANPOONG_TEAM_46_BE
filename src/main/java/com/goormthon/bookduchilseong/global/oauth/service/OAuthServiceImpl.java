@@ -81,17 +81,15 @@ public class OAuthServiceImpl implements OAuthService {
         log.info("Jwt Access Token : {}", jwtRefreshToken);
 
         // 5. Refresh Token 저장
-//        authRepository.saveRefreshToken(
-//                user.getId(),
-//                jwtRefreshToken,
-//                jwtTokenProvider.getRefreshTokenValidity()
-//        );
+        authRepository.saveRefreshToken(
+                user.getId(),
+                jwtRefreshToken,
+                jwtTokenProvider.getRefreshTokenValidity()
+        );
 
         return KakaoLoginResponseDto.builder()
-                .accountId(1L) // Mock 데이터
                 .accessToken(jwtAccessToken) // 반환해주는 jwtAccessToken
                 .refreshToken(jwtRefreshToken) // 반환해주는 jwtRefreshToken
-                .isNewUser(false)
                 .build();
     }
 
