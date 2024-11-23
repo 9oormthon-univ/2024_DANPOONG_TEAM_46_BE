@@ -34,9 +34,6 @@ public class User extends BaseEntity {
 	@Column(name = "kakaothumbnail", nullable = true)
 	private String kakaothumbnail;
 
-	@Column(name = "kakaothumbnail", nullable = true)
-	private String kakaothumbnail;
-
 	@Column(name = "profile", nullable = true)
 	private String profile; // 프로필 사진 uri(nullable)
 
