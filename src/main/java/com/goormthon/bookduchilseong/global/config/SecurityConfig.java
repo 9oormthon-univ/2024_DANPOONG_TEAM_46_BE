@@ -19,11 +19,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
+@Component
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -66,7 +67,6 @@ public class SecurityConfig {
         // Public endpoint 허용
         httpSecurity.authorizeHttpRequests(authorizeHttpRequests ->
                 authorizeHttpRequests
-                        .requestMatchers("/").permitAll().anyRequest().authenticated() // 모든 경로인가
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers("http://localhost:8080/api/v1/oauth/kakao/callback").permitAll() // 인증 없이 허용
                         .requestMatchers("/api/v1/account/signup").permitAll()

@@ -6,11 +6,8 @@ import lombok.NonNull;
 
 @Builder
 public record KakaoLoginResponseDto(
-        @NonNull Long accountId,
         @NonNull String accessToken,
-        @NonNull String refreshToken,
-        @Schema(description = "신규 유저 여부.")
-        boolean isNewUser
+        @NonNull String refreshToken
 ) {
 
 }

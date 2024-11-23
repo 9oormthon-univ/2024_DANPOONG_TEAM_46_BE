@@ -44,8 +44,9 @@ public class OAuthController {
             }
     )
     @GetMapping("/kakao/callback")
-    public ResponseEntity<KakaoLoginResponseDto> kakaoCallback(@RequestParam("code") String code) {
+    public com.goormthon.bookduchilseong.global.apiPayload.ApiResponse<?> kakaoCallback(@RequestParam("code") String code) {
         KakaoLoginResponseDto response = oAuthService.processKakaoCallback(code);
-        return ResponseEntity.ok(response);
+//        return ResponseEntity.ok(response);
+        return com.goormthon.bookduchilseong.global.apiPayload.ApiResponse.onSuccess(response);
     }
 }
