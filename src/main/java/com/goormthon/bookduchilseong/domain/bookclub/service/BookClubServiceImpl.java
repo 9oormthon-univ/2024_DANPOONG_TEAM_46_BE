@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.goormthon.bookduchilseong.global.security.jwt.JwtTokenProvider;
+import io.jsonwebtoken.Jwt;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -47,11 +49,11 @@ public class BookClubServiceImpl implements BookClubService {
 	private final UserBookClubRepository userBookClubRepository;
 	private final BookRepository bookRepository;
 	private final CertificationRepository certificationRepository;
-
+	private final JwtTokenProvider jwtTokenProvider;
 	@Override
 	@Transactional
-	public void createBookClubOnly(BookClubOnlyRequestDTO bookClubOnlyRequestDTO, Long userId) {
-
+	public void createBookClubOnly(BookClubOnlyRequestDTO bookClubOnlyRequestDTO, String token) {
+		Long userId = jwtTokenProvider.getUserIdFromToken(token);
 		BookClub bookClub = BookClub.builder()
 			.title(bookClubOnlyRequestDTO.getTitle())
 			.introduction(bookClubOnlyRequestDTO.getIntroduction())
@@ -75,8 +77,8 @@ public class BookClubServiceImpl implements BookClubService {
 
 	@Override
 	@Transactional
-	public void createBookClubTogether(BookClubTogetherRequestDTO bookClubTogetherRequestDTO, Long userId) {
-
+	public void createBookClubTogether(BookClubTogetherRequestDTO bookClubTogetherRequestDTO, String token) {
+		Long userId = jwtTokenProvider.getUserIdFromToken(token);
 		BookClub bookClub = BookClub.builder()
 			.title(bookClubTogetherRequestDTO.getTitle())
 			.introduction(bookClubTogetherRequestDTO.getIntroduction())
@@ -114,8 +116,8 @@ public class BookClubServiceImpl implements BookClubService {
 
 	@Override
 	@Transactional
-	public void joinBookClub(Long bookclubId, Long userId) {
-
+	public void joinBookClub(Long bookclubId, String token) {
+		Long userId = jwtTokenProvider.getUserIdFromToken(token);
 		User user = findUser(userId);
 
 		BookClub bookClub = findBookClub(bookclubId);
@@ -238,8 +240,8 @@ public class BookClubServiceImpl implements BookClubService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<BookClubJoinedDTO> getJoinedBookClubs(Long userId) {
-
+	public List<BookClubJoinedDTO> getJoinedBookClubs(String token) {
+		Long userId = jwtTokenProvider.getUserIdFromToken(token);
 		User user = findUser(userId);
 
 		List<BookClub> bookClubs = bookClubRepository.findByUser(user);
@@ -262,8 +264,8 @@ public class BookClubServiceImpl implements BookClubService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<BookClubJoinDTO> getjoinBookClubs(Long userId) {
-
+	public List<BookClubJoinDTO> getjoinBookClubs(String token) {
+		Long userId = jwtTokenProvider.getUserIdFromToken(token);
 		User user = findUser(userId);
 
 		List<BookClub> bookClubs = bookClubRepository.findByUser(user);

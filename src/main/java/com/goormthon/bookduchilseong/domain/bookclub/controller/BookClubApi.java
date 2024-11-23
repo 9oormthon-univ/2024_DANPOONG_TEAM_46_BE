@@ -21,8 +21,8 @@ public interface BookClubApi {
 	ApiResponse<?> createBookClubOnly(
 		@Parameter(description = "혼자 읽는 북클럽 요청 데이터", required = true)
 		@RequestBody BookClubOnlyRequestDTO bookClubOnlyRequestDTO,
-		@Parameter(description = "사용자 ID", required = true, example = "1")
-		@RequestParam("userId") Long userId
+		@Parameter(description = "JWT 토큰", required = true)
+		@RequestHeader("Authorization") String token
 	);
 
 	@Operation(summary = "함께하는 북클럽 생성", description = "함께 읽는 북클럽을 생성합니다.")
@@ -30,8 +30,8 @@ public interface BookClubApi {
 	ApiResponse<?> createBookClubTogether(
 		@Parameter(description = "함께 읽는 북클럽 요청 데이터", required = true)
 		@RequestBody BookClubTogetherRequestDTO bookClubTogetherRequestDTO,
-		@Parameter(description = "사용자 ID", required = true, example = "1")
-		@RequestParam("userId") Long userId
+		@Parameter(description = "JWT 토큰", required = true)
+		@RequestHeader("Authorization") String token
 	);
 
 	@Operation(summary = "북클럽 가입", description = "북클럽에 사용자가 가입합니다.")
@@ -39,8 +39,8 @@ public interface BookClubApi {
 	ApiResponse<?> joinBookClub(
 		@Parameter(description = "북클럽 ID", required = true, example = "1")
 		@PathVariable Long bookclubId,
-		@Parameter(description = "사용자 ID", required = true, example = "1")
-		@RequestParam("userId") Long userId
+		@Parameter(description = "JWT 토큰", required = true)
+		@RequestHeader("Authorization") String token
 	);
 
 	@Operation(summary = "북클럽 목록 조회", description = "전체 북클럽 목록을 조회합니다.")
@@ -71,14 +71,14 @@ public interface BookClubApi {
 	@Operation(summary = "사용자가 이전에 가입한 북클럽 목록 조회", description = "사용자가 이전에 가입했던 북클럽 목록을 조회합니다.")
 	@GetMapping("/joined")
 	ApiResponse<?> getJoinedBookClubs(
-		@Parameter(description = "사용자 ID", required = true, example = "1")
-		@RequestParam("userId") Long userId
+			@Parameter(description = "JWT 토큰", required = true)
+			@RequestHeader("Authorization") String token
 	);
 
 	@Operation(summary = "사용자가 현재 가입한 북클럽 조회", description = "사용자가 현재 참여 중인 북클럽 목록을 조회합니다.")
 	@GetMapping("/join")
 	ApiResponse<?> getJoinBookClubs(
-		@Parameter(description = "사용자 ID", required = true, example = "1")
-		@RequestParam("userId") Long userId
+			@Parameter(description = "JWT 토큰", required = true)
+			@RequestHeader("Authorization") String token
 	);
 }
