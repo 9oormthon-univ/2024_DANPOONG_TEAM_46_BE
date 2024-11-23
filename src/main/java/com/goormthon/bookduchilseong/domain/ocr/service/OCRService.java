@@ -12,13 +12,17 @@ import java.util.UUID;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class OCRService {
-	private static final String SECRET = "";
-	private static final String API_URL = "";
+	@Value("${spring.naver.ocr.client-secret}")
+	private String SECRET;
+
+	@Value("${spring.naver.ocr.api-url}")
+	private String API_URL;
 
 	public String execute(MultipartFile file) {
 		try {
@@ -47,15 +51,15 @@ public class OCRService {
 		return Base64.encodeBase64String(bytes);
 	}
 
-	private static HttpURLConnection createRequestHeader(URL url) throws IOException {
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+	private HttpURLConnection createRequestHeader(URL url) throws IOException {
+		HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 		connection.setUseCaches(false);
 		connection.setDoInput(true);
 		connection.setDoOutput(true);
 		connection.setReadTimeout(5000);
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("Content-Type", "application/json;");
-		connection.setRequestProperty("X-OCR-SECRET", SECRET);
+		connection.setRequestProperty("X-OCR-SECRET", SECRET); // 인스턴스 변수 사용
 		return connection;
 	}
 
