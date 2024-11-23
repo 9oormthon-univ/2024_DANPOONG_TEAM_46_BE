@@ -20,14 +20,14 @@ public class BookController implements BookApi {
 	private final BookService bookService;
 
 	@PostMapping
-	public ApiResponse<?> addBook(@RequestBody BookRequestDTO requestDto) {
-		BookResponseDTO responseDto = bookService.addBook(requestDto);
+	public ApiResponse<?> addBook(@RequestBody BookRequestDTO requestDto, String token) {
+		BookResponseDTO responseDto = bookService.addBook(requestDto, token);
 		return ApiResponse.onSuccess(responseDto);
 	}
 
 	@GetMapping
-	public ApiResponse<?> getAllBooks(@RequestParam Long userId) {
-		List<BookResponseDTO> books = bookService.getAllBooks(userId);
+	public ApiResponse<?> getAllBooks(@RequestHeader(name = "Authorization") String token) {
+		List<BookResponseDTO> books = bookService.getAllBooks(token);
 		return ApiResponse.onSuccess(books);
 	}
 

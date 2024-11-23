@@ -13,11 +13,11 @@ import com.goormthon.bookduchilseong.domain.bookclub.dto.response.BookClubRespon
 
 public interface BookClubService {
 
-	void createBookClubOnly(BookClubOnlyRequestDTO bookClubOnlyRequestDTO, Long userId);
+	void createBookClubOnly(BookClubOnlyRequestDTO bookClubOnlyRequestDTO, String token);
 
-	void createBookClubTogether(BookClubTogetherRequestDTO bookClubTogetherRequestDTO, Long userId);
+	void createBookClubTogether(BookClubTogetherRequestDTO bookClubTogetherRequestDTO, String token);
 
-	void joinBookClub(Long bookClubId, Long userId);
+	void joinBookClub(Long bookClubId, String token);
 
 	List<BookClubResponseDTO> getBookClubs();
 
@@ -27,7 +27,7 @@ public interface BookClubService {
 
 	List<BookClubGalleryDTO> getBookClubGallery(Long bookclubId);
 
-	List<BookClubJoinedDTO> getJoinedBookClubs(Long userId);
+	List<BookClubJoinedDTO> getJoinedBookClubs(String token);
 
-	List<BookClubJoinDTO> getjoinBookClubs(Long userId);
+	List<BookClubJoinDTO> getjoinBookClubs(String token);
 }

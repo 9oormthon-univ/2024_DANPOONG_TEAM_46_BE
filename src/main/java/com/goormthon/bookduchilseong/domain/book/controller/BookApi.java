@@ -1,12 +1,6 @@
 package com.goormthon.bookduchilseong.domain.book.controller;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import com.goormthon.bookduchilseong.domain.book.dto.request.BookRequestDTO;
 import com.goormthon.bookduchilseong.global.apiPayload.ApiResponse;
@@ -22,14 +16,16 @@ public interface BookApi {
 	@PostMapping
 	ApiResponse<?> addBook(
 		@Parameter(description = "추가할 도서 정보", required = true)
-		@RequestBody BookRequestDTO requestDto
+		@RequestBody BookRequestDTO requestDto,
+		@Parameter(description = "JWT 토큰", required = true)
+		@RequestHeader("Authorization") String token
 	);
 
 	@Operation(summary = "전체 도서 조회", description = "특정 사용자의 모든 도서를 조회합니다.")
 	@GetMapping
 	ApiResponse<?> getAllBooks(
-		@Parameter(description = "사용자 ID", required = true, example = "1")
-		@RequestParam Long userId
+			@Parameter(description = "JWT 토큰", required = true)
+			@RequestHeader("Authorization") String token
 	);
 
 	@Operation(summary = "도서 상세 조회", description = "특정 도서의 상세 정보를 조회합니다.")
@@ -60,7 +56,8 @@ public interface BookApi {
 	ApiResponse<?> shareBook(
 		@Parameter(description = "도서 ID", required = true, example = "1")
 		@PathVariable Long bookId,
-		@Parameter(description = "북클럽 ID", required = true, example = "1")
-		@RequestParam(name = "userId") Long userId
+		@Parameter(description = "북클럽 아이디", required = true)
+		@RequestParam(name = "bookclubId") Long bookclubId
+
 	);
 }

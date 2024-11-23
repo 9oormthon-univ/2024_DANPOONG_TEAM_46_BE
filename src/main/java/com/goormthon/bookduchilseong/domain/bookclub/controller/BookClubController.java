@@ -2,13 +2,8 @@ package com.goormthon.bookduchilseong.domain.bookclub.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.goormthon.bookduchilseong.global.security.jwt.JwtTokenProvider;
+import org.springframework.web.bind.annotation.*;
 
 import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubOnlyRequestDTO;
 import com.goormthon.bookduchilseong.domain.bookclub.dto.request.BookClubTogetherRequestDTO;
@@ -28,24 +23,25 @@ public class BookClubController implements BookClubApi {
 
 	private final BookClubService bookClubService;
 
+	private final JwtTokenProvider jwtTokenProvider;
 	@PostMapping("/only")
 	public ApiResponse<?> createBookClubOnly(@RequestBody BookClubOnlyRequestDTO bookClubOnlyRequestDTO,
-		@RequestParam("userId") Long userId) {
-		bookClubService.createBookClubOnly(bookClubOnlyRequestDTO, userId);
+		@RequestHeader("Authorization") String token) {
+		bookClubService.createBookClubOnly(bookClubOnlyRequestDTO, token);
 		return ApiResponse.onSuccess("북클럽 생성 성공");
 	}
 
 	@PostMapping("/together")
 	public ApiResponse<?> createBookClubTogether(@RequestBody BookClubTogetherRequestDTO bookClubTogetherRequestDTO,
-	@RequestParam("userId") Long userId){
-		bookClubService.createBookClubTogether(bookClubTogetherRequestDTO, userId);
+												 @RequestHeader("Authorization") String token){
+		bookClubService.createBookClubTogether(bookClubTogetherRequestDTO, token);
 		return ApiResponse.onSuccess("북클럽 생성 성공");
 	}
 
 	@PostMapping("/{bookclubId}/join")
 	public ApiResponse<?> joinBookClub(@PathVariable Long bookclubId,
-		@RequestParam("userId") Long userId) {
-		bookClubService.joinBookClub(bookclubId, userId);
+									   @RequestHeader("Authorization") String token) {
+		bookClubService.joinBookClub(bookclubId, token);
 		return ApiResponse.onSuccess("북클럽 가입하기 성공");
 	}
 
@@ -70,12 +66,12 @@ public class BookClubController implements BookClubApi {
 	}
 
 	@GetMapping("/joined")
-	public ApiResponse<?> getJoinedBookClubs(@RequestParam("userId") Long userId) {
-		return ApiResponse.onSuccess(bookClubService.getJoinedBookClubs(userId));
+	public ApiResponse<?> getJoinedBookClubs(@RequestHeader("Authorization") String token) {
+		return ApiResponse.onSuccess(bookClubService.getJoinedBookClubs(token));
 	}
 
 	@GetMapping("/join")
-	public ApiResponse<?> getJoinBookClubs(@RequestParam("userId") Long userId) {
-		return ApiResponse.onSuccess(bookClubService.getjoinBookClubs(userId));
+	public ApiResponse<?> getJoinBookClubs(@RequestHeader("Authorization") String token) {
+		return ApiResponse.onSuccess(bookClubService.getjoinBookClubs(token));
 	}
 }
