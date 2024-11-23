@@ -51,7 +51,6 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public List<BookResponseDTO> getAllBooks(String token) {
 		Long userId = jwtTokenProvider.getUserIdFromToken(token);
-		User user = findUserByUserId(token);
 
 		return bookRepository.findByUserId(userId).stream()
 			.map(BookResponseDTO::new)

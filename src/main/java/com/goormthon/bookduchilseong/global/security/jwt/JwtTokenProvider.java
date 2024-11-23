@@ -36,6 +36,7 @@ public class JwtTokenProvider {
 
     // 토큰으로부터 사용자 ID 추출
     public Long getUserIdFromToken(String token) {
+        token = token.replace("Bearer ", "").trim();
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(secretKey.getBytes())
                 .build()
