@@ -20,9 +20,6 @@ import lombok.Setter;
 @Builder
 public class BookRequestDTO {
 
-	@NotNull(message = "User ID is required.")
-	private Long userId;
-
 	@NotBlank(message = "Title is required.")
 	@Size(max = 255, message = "Title must be 255 characters or less.")
 	private String title;

@@ -3,6 +3,8 @@ package com.goormthon.bookduchilseong.domain.book.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.goormthon.bookduchilseong.global.security.jwt.JwtTokenProvider;
+import io.jsonwebtoken.Jwt;
 import org.springframework.stereotype.Service;
 
 import com.goormthon.bookduchilseong.domain.book.dto.request.BookRequestDTO;
@@ -27,11 +29,13 @@ public class BookServiceImpl implements BookService {
 	private final BookRepository bookRepository;
 	private final UserRepository userRepository;
 	private final BookClubRepository bookClubRepository;
-
+	private final JwtTokenProvider jwtTokenProvider;
 	@Override
-	public BookResponseDTO addBook(BookRequestDTO requestDto) {
+	public BookResponseDTO addBook(BookRequestDTO requestDto, String token) {
+		Long userId = jwtTokenProvider.getUserIdFromToken(token);
+
 		Book book = Book.builder()
-			.user(findUserByUserId(requestDto.getUserId()))
+			.user(findUserByUserId(token))
 			.title(requestDto.getTitle())
 			.author(requestDto.getAuthor())
 			.totalPage(requestDto.getTotalPage())
@@ -45,8 +49,9 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public List<BookResponseDTO> getAllBooks(Long userId) {
-		User user = findUserByUserId(userId);
+	public List<BookResponseDTO> getAllBooks(String token) {
+		Long userId = jwtTokenProvider.getUserIdFromToken(token);
+		User user = findUserByUserId(token);
 
 		return bookRepository.findByUserId(userId).stream()
 			.map(BookResponseDTO::new)
@@ -100,7 +105,8 @@ public class BookServiceImpl implements BookService {
 		bookRepository.save(book);
 	}
 
-	private User findUserByUserId(Long userId) {
+	private User findUserByUserId(String token) {
+		Long userId = jwtTokenProvider.getUserIdFromToken(token);
 		return userRepository.findById(userId)
 			.orElseThrow(() -> new GeneralException(ErrorStatus._USER_NOT_FOUND));
 	}
