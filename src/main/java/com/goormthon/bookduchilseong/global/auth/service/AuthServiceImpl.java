@@ -1,7 +1,14 @@
 package com.goormthon.bookduchilseong.global.auth.service;
 
+import com.goormthon.bookduchilseong.domain.bookclub.service.BookClubService;
 import com.goormthon.bookduchilseong.domain.user.entity.User;
+import com.goormthon.bookduchilseong.domain.user.repository.UserRepository;
 import com.goormthon.bookduchilseong.domain.user.service.UserService;
+import com.goormthon.bookduchilseong.domain.zodiacsign.entity.Zodiacsign;
+import com.goormthon.bookduchilseong.domain.zodiacsign.entity.Zodiacsigns;
+import com.goormthon.bookduchilseong.domain.zodiacsign.repository.ZodiacsignRepository;
+import com.goormthon.bookduchilseong.global.apiPayload.code.status.ErrorStatus;
+import com.goormthon.bookduchilseong.global.apiPayload.exception.GeneralException;
 import com.goormthon.bookduchilseong.global.auth.dto.response.AccountLoginResponseDto;
 import com.goormthon.bookduchilseong.global.auth.dto.response.KakaoUserResponseDto;
 import com.goormthon.bookduchilseong.global.auth.dto.response.TokenRefreshResponseDto;
@@ -19,6 +26,9 @@ public class AuthServiceImpl implements AuthService{
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthRepository authRepository;
+    private final ZodiacsignRepository zodiacsignRepository;
+    private final BookClubService bookClubService;
+    private final UserRepository userRepository;
 
     public TokenRefreshResponseDto refreshToken(String refreshToken){
         // 1. Refresh Token 검증
@@ -26,6 +36,8 @@ public class AuthServiceImpl implements AuthService{
 
         // 2. 사용자 ID 추출
         Long userId = jwtTokenProvider.getUserIdFromToken(refreshToken);
+        User user = findUser(userId);
+
 
         // 3. Redis에서 Refresh Token 존재 확인
         String storedToken = authRepository.findRefreshTokenByAccountId(userId)
@@ -64,5 +76,9 @@ public class AuthServiceImpl implements AuthService{
                 .build();
     }
 
+    private User findUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus._USER_NOT_FOUND));
+    }
 
 }
