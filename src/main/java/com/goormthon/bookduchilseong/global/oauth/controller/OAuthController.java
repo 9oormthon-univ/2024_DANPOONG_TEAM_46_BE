@@ -1,11 +1,15 @@
 package com.goormthon.bookduchilseong.global.oauth.controller;
 
+import java.net.URI;
+
 import com.goormthon.bookduchilseong.global.oauth.dto.response.KakaoLoginResponseDto;
 import com.goormthon.bookduchilseong.global.oauth.dto.response.KakaoLoginUrlResponseDto;
 import com.goormthon.bookduchilseong.global.oauth.service.OAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,9 +48,22 @@ public class OAuthController {
             }
     )
     @GetMapping("/kakao/callback")
-    public com.goormthon.bookduchilseong.global.apiPayload.ApiResponse<?> kakaoCallback(@RequestParam("code") String code) {
+    public ResponseEntity<Void> kakaoCallback(@RequestParam("code") String code) {
         KakaoLoginResponseDto response = oAuthService.processKakaoCallback(code);
-//        return ResponseEntity.ok(response);
-        return com.goormthon.bookduchilseong.global.apiPayload.ApiResponse.onSuccess(response);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Set-Cookie", "userId=" + response + "; Path=/; HttpOnly");
+
+        String redirectUrl = "http://api.book7stars.site:3000";  // 메인 페이지 URL로 변경
+
+        return ResponseEntity.status(301)
+            .location(URI.create(redirectUrl))  // 리다이렉트할 URL 설정
+            .build();
     }
+//     @GetMapping("/kakao/callback")
+//     public com.goormthon.bookduchilseong.global.apiPayload.ApiResponse<?> kakaoCallback(@RequestParam("code") String code) {
+//         KakaoLoginResponseDto response = oAuthService.processKakaoCallback(code);
+// //        return ResponseEntity.ok(response);
+//         return com.goormthon.bookduchilseong.global.apiPayload.ApiResponse.onSuccess(response);
+//     }
 }
+
