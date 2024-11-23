@@ -57,3 +57,9 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+jib {
+	to {
+			image = 'zmflspa123/bookduchilseong'
+	}
+}
