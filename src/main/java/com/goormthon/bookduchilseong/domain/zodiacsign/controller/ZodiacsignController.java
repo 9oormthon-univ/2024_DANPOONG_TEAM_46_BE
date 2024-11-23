@@ -17,7 +17,7 @@ public class ZodiacsignController implements ZodiacsignApi {
 	private final ZodiacsignService zodiacsignService;
 
 	@GetMapping("/my-zodiacsigns")
-	public ApiResponse<?> getMyZodiacsigns(@RequestHeader("Authrization") String token) {
+	public ApiResponse<?> getMyZodiacsigns(@RequestHeader(name = "Authrization") String token) {
 		return ApiResponse.onSuccess(zodiacsignService.getMyZodiacsigns(token));
 	}
 
@@ -28,13 +28,13 @@ public class ZodiacsignController implements ZodiacsignApi {
 
 	@PatchMapping("/{zodiacsignId}/profile")
 	public ApiResponse<?> updateProfile(@PathVariable("zodiacsignId") Long zodiacsignId,
-										@RequestHeader("Authrization") String token) {
+										@RequestHeader(name = "Authrization") String token) {
 		zodiacsignService.updateProfile(zodiacsignId, token);
 		return ApiResponse.onSuccess("프로필 지정 성공");
 	}
 
 	@PostMapping("/draw")
-	public ApiResponse<?> drawZodiacsign(@RequestHeader("Authrization") String token) {
+	public ApiResponse<?> drawZodiacsign(@RequestHeader(name = "Authrization") String token) {
 		zodiacsignService.drawZodiacsign(token);
 		return ApiResponse.onSuccess("별자리 뽑기 성공");
 	}
